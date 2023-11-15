@@ -23,4 +23,9 @@ public class ChessBoard {
             }
         }
     }
+    protected void move(Square start, Square finish)
+    {
+        finish.setPiece(start.getPiece());
+        start.setPiece(null);
+    }
 }
