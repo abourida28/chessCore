@@ -4,6 +4,7 @@
  */
 package com.mycompany.chesscore.pieces;
 import com.mycompany.chesscore.ChessBoard;
+import com.mycompany.chesscore.Square;
 import com.mycompany.chesscore.constants.Letter;
 import com.mycompany.chesscore.constants.Color;
 /**
@@ -13,10 +14,18 @@ import com.mycompany.chesscore.constants.Color;
 public abstract class Piece {
     protected int row;
     protected Letter column;
+
+    public Color getColor() {
+        return color;
+    }
+
+    public ChessBoard getBoard() {
+        return board;
+    }
     
-    protected Color color;
+    private Color color;
     
-    protected ChessBoard board;
+    private ChessBoard board;
     public Piece(Color color, int row, Letter column, ChessBoard board)
     {
         this.color = color;
@@ -25,7 +34,7 @@ public abstract class Piece {
         this.board = board;
     }
     
-    abstract public boolean isValidMove(String target);
+    abstract public boolean isValidMove(Square target);
     
     public void setRow(int row) {
         this.row = row;
