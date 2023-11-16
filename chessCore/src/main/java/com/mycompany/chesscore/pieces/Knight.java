@@ -20,7 +20,8 @@ public class Knight extends Piece {
 
     @Override
     public boolean isValidMove(Square target) {
-        super.isValidMove(target);
+        if (!super.isValidMove(target))
+            return false;
         
         int distanceH = Math.abs(super.column.ordinal() - target.getColumn().ordinal());
         int distanceV = Math.abs(super.row - target.getRow());

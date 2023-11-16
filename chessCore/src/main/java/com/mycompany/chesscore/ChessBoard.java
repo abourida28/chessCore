@@ -13,6 +13,7 @@ import com.mycompany.chesscore.pieces.Pawn;
 import com.mycompany.chesscore.pieces.Piece;
 import com.mycompany.chesscore.pieces.Queen;
 import com.mycompany.chesscore.pieces.Rook;
+import com.mycompany.chesscore.constants.Color;
 import java.util.ArrayList;
 
 /**
@@ -143,5 +144,27 @@ public class ChessBoard {
         finish.setPiece(piece);
         start.setPiece(null);
         piece.move(finish);
+    }
+    
+    protected Square findKing(Color color)
+    {
+        if (color == Color.WHITE)
+        {
+            for (Piece piece : whitePieces)
+            {
+                if (piece instanceof King)
+                    return piece.getSquare();
+            }
+        }
+        
+        else
+        {
+            for (Piece piece : blackPieces)
+            {
+                if (piece instanceof King)
+                    return piece.getSquare();
+            }
+        }
+        return null;
     }
 }

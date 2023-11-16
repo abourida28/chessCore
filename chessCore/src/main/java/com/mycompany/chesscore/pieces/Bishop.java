@@ -13,7 +13,9 @@ public class Bishop extends Piece {
 
     @Override
     public boolean isValidMove(Square target) {
-        super.isValidMove(target);
+        if (!super.isValidMove(target)) {
+            return false;
+        }
         int targetRow = target.getRow();
         int targetColumn = target.getColumn().ordinal();
         int currentRow = this.row;
@@ -27,7 +29,7 @@ public class Bishop extends Piece {
             //up or down, left or right by the sign being incremented
             int rowDirection = (targetRow > currentRow) ? 1 : -1;
             int colDirection = (targetColumn > currentColumn) ? 1 : -1;
-            
+
             int checkRow = currentRow + rowDirection;
             int checkColumn = currentColumn + colDirection;
 
@@ -41,7 +43,7 @@ public class Bishop extends Piece {
                 checkColumn += colDirection;
             }
             // Check if the target square is empty or has an opponent's piece
-            return target.getPiece() == null || target.getPiece().getColor() != getColor();
+            return true;
         }
         return false;  // Not a valid diagonal move
     }

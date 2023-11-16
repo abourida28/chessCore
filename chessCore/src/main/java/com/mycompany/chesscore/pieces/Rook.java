@@ -33,11 +33,15 @@ public class Rook extends Piece {
 
     @Override
     public boolean isValidMove(Square target) {
+        //First check that target is empty or enemy
+        if (!super.isValidMove(target)) {
+            return false;
+        }
+        
+        
         int targetV = target.getRow();
         Letter targetH = target.getColumn();
         Square[][] board = super.getBoard().board;
-        //First check that target is empty or enemy
-        super.isValidMove(target);
         
         //check that rook is moving on a row or a column
         if (targetH == super.column) {

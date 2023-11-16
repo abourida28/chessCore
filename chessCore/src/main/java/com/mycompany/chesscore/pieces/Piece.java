@@ -50,4 +50,10 @@ public abstract class Piece {
         this.row = target.getRow();
     }
     
+    public Square getSquare()
+    {
+        Square square = new Square(row, column);
+        return square;
+    }
+    
 }

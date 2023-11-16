@@ -88,14 +88,12 @@ public class Pawn extends Piece {
                         && getBoard().board[currentRow][currentColumn - 1].getPiece() instanceof Pawn
                         && getBoard().board[currentRow][currentColumn - 1].getPiece().getColor() != Color.WHITE
                         && ((Pawn) getBoard().board[currentRow][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
-                         System.out.println("EN PASSANT");
                          return true;
                 }else{
                       if (currentColumn < 8 && getBoard().board[currentRow][currentColumn + 1].getPiece() != null
                         && getBoard().board[currentRow][currentColumn + 1].getPiece() instanceof Pawn
                         && getBoard().board[currentRow][currentColumn + 1].getPiece().getColor() != Color.WHITE
                         && ((Pawn) getBoard().board[currentRow][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
-                          System.out.println("EN PASSANT");
                           return true;
                 }      
                  }

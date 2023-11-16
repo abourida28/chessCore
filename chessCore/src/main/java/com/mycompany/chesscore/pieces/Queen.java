@@ -13,7 +13,9 @@ public class Queen extends Piece {
 
     @Override
     public boolean isValidMove(Square target) {
-        super.isValidMove(target);
+        if (!super.isValidMove(target)) {
+            return false;
+        }
         int targetRow = target.getRow();
         int targetColumn = target.getColumn().ordinal();
         int currentRow = this.row;
@@ -23,25 +25,27 @@ public class Queen extends Piece {
         int columnDifference = Math.abs(targetColumn - currentColumn);
 
         // Check if the move is horizontal, vertical, or diagonal
-        if ((rowDifference == 0 && columnDifference > 0) ||     // Horizontal move
-            (rowDifference > 0 && columnDifference == 0) ||     // Vertical move
-            (rowDifference == columnDifference)) {               // Diagonal move
+        if ((rowDifference == 0 && columnDifference > 0)
+                || // Horizontal move
+                (rowDifference > 0 && columnDifference == 0)
+                || // Vertical move
+                (rowDifference == columnDifference)) {               // Diagonal move
             // Check if there are no pieces blocking the path
             int rowDirection;
             int colDirection;
-            
-            if(targetRow > currentRow){
+
+            if (targetRow > currentRow) {
                 rowDirection = 1;
-            }else if(targetRow < currentRow){
+            } else if (targetRow < currentRow) {
                 rowDirection = -1;
-            }else{
+            } else {
                 rowDirection = 0;
             }
-            if(targetColumn > currentColumn){
+            if (targetColumn > currentColumn) {
                 colDirection = 1;
-            }else if(targetColumn < currentColumn){
+            } else if (targetColumn < currentColumn) {
                 colDirection = -1;
-            }else{
+            } else {
                 colDirection = 0;
             }
 
@@ -58,7 +62,7 @@ public class Queen extends Piece {
             }
 
             // Check if the target square is empty or has a different colored piece
-            return target.getPiece() == null || target.getPiece().getColor() != getColor();
+            return true;
         }
 
         return false; // Not a valid horizontal, vertical, or diagonal move
