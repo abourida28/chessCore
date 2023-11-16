@@ -6,6 +6,7 @@ package com.mycompany.chesscore;
 
 import com.mycompany.chesscore.Square;
 import com.mycompany.chesscore.constants.Letter;
+import com.mycompany.chesscore.pieces.Piece;
 
 /**
  *
@@ -25,7 +26,9 @@ public class ChessBoard {
     }
     protected void move(Square start, Square finish)
     {
-        finish.setPiece(start.getPiece());
+        Piece piece = start.getPiece();
+        finish.setPiece(piece);
         start.setPiece(null);
+        piece.move(finish);
     }
 }

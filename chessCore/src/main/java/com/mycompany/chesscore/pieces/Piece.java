@@ -36,12 +36,10 @@ public abstract class Piece {
     
     abstract public boolean isValidMove(Square target);
     
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public void setColumn(Letter column) {
-        this.column = column;
+    public void move(Square target)
+    {
+        this.column = target.getColumn();
+        this.row = target.getRow();
     }
     
 }

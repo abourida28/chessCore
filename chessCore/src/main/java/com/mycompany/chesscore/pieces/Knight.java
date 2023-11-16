@@ -6,16 +6,15 @@ package com.mycompany.chesscore.pieces;
 
 import com.mycompany.chesscore.ChessBoard;
 import com.mycompany.chesscore.Square;
-import com.mycompany.chesscore.constants.Color;
-import com.mycompany.chesscore.constants.Letter;
-import java.lang.Math;
+import com.mycompany.chesscore.constants;
+
 /**
  *
  * @author omara
  */
-public class King extends Piece {
+public class Knight extends Piece {
 
-    public King(Color color, int row, Letter column, ChessBoard board) {
+    public Knight(constants.Color color, int row, constants.Letter column, ChessBoard board) {
         super(color, row, column, board);
     }
 
@@ -28,10 +27,10 @@ public class King extends Piece {
         }
         int distanceH = Math.abs(super.column.ordinal() - target.getColumn().ordinal());
         int distanceV = Math.abs(super.row - target.getRow());
-        if (distanceH <= 1 && distanceV <= 1)
-        {
+        if (distanceV == 2 && distanceH == 1)
             return true;
-        }
+        if (distanceV == 1 && distanceH == 2)
+            return true;
         return false;
     }
     
