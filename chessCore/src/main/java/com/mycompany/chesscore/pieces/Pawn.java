@@ -1,0 +1,123 @@
+package com.mycompany.chesscore.pieces;
+
+import com.mycompany.chesscore.ChessBoard;
+import com.mycompany.chesscore.Square;
+import com.mycompany.chesscore.constants.Color;
+import com.mycompany.chesscore.constants.Letter;
+import com.mycompany.chesscore.pieces.*;
+public class Pawn extends Piece {
+
+    private boolean moved;
+    private boolean firstMoveDouble;
+
+    public Pawn(Color color, int row, Letter column, ChessBoard board) {
+        super(color, row, column, board);
+        this.moved = false;
+        this.firstMoveDouble = false;
+    }
+
+    public boolean hasMovedFirstDoubleMove() {
+        return firstMoveDouble;
+    }
+    
+     public boolean isPromotable() {
+        return (getColor() == Color.WHITE && row == 8) || (getColor() == Color.BLACK && row == 1);
+    }
+
+    public boolean promoteTo(char promoteTo) {
+        // to be implemented put newPiece with the corresponding Case either in pawn class of gamelogic class
+//        Piece newPiece;
+        switch (promoteTo) {
+            case 'K':
+//                getBoard().board[row - 1][column.ordinal()].setPiece(newPiece);
+                return true;
+            case 'B':
+//                getBoard().board[row - 1][column.ordinal()].setPiece(newPiece);
+                return true;
+            case 'R':
+//                getBoard().board[row - 1][column.ordinal()].setPiece(newPiece);
+                return true;
+            case 'Q':
+//                getBoard().board[row - 1][column.ordinal()].setPiece(newPiece);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean isValidMove(Square target) {
+        super.isValidMove(target);
+        int targetRow = target.getRow();
+        int targetColumn = target.getColumn().ordinal();
+        int currentRow = this.row;
+        int currentColumn = this.column.ordinal();
+
+        int rowDifference = targetRow - currentRow;
+        int columnDifference = Math.abs(targetColumn - currentColumn);
+
+        if (getColor() == Color.WHITE) {
+            // White pawn moves
+            if (rowDifference == 1 && columnDifference == 0 && target.getPiece() == null) {
+                moved = true;
+                // Regular one step forward
+                return true;
+            } else if (!firstMoveDouble && !moved && rowDifference == 2 && columnDifference == 0
+                    && target.getPiece() == null && getBoard().board[currentRow + 1][currentColumn].getPiece() == null) {
+                firstMoveDouble = true;
+                // First two steps forward
+                return true;
+            } else if (rowDifference == 1 && columnDifference == 1 && target.getPiece() != null
+                    && target.getPiece().getColor() == Color.BLACK) {
+                // Capture diagonally
+                return true;
+            } else if (rowDifference == 1 && columnDifference == 1 && target.getPiece() == null) {
+                // En passant capture (check both sides)
+                if (currentColumn > 1 && getBoard().board[currentRow][currentColumn - 1].getPiece() != null
+                        && getBoard().board[currentRow][currentColumn - 1].getPiece() instanceof Pawn
+                        && getBoard().board[currentRow][currentColumn - 1].getPiece().getColor() != Color.WHITE
+                        && ((Pawn) getBoard().board[currentRow][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
+                    return true;
+                }
+                if (currentColumn < 8 && getBoard().board[currentRow][currentColumn + 1].getPiece() != null
+                        && getBoard().board[currentRow][currentColumn + 1].getPiece() instanceof Pawn
+                        && getBoard().board[currentRow][currentColumn + 1].getPiece().getColor() != Color.WHITE
+                        && ((Pawn) getBoard().board[currentRow][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
+                    return true;
+                }
+            }
+        } else {
+            // Black pawn moves
+            if (rowDifference == 1 && columnDifference == 0 && target.getPiece() == null) {
+                moved = true;
+                // Regular one step forward
+                return true;
+            } else if (!firstMoveDouble && !moved && rowDifference == 2 && columnDifference == 0
+                    && target.getPiece() == null && getBoard().board[currentRow - 1][currentColumn].getPiece() == null) {
+                firstMoveDouble = true;
+                // First two steps forward
+                return true;
+            } else if (rowDifference == 1 && columnDifference == 1 && target.getPiece() != null
+                    && target.getPiece().getColor() == Color.WHITE) {
+                // Capture diagonally
+                return true;
+            } else if (rowDifference == 1 && columnDifference == 1 && target.getPiece() == null) {
+                // En passant capture (check both sides)
+                if (currentColumn > 1 && getBoard().board[currentRow][currentColumn - 1].getPiece() != null
+                        && getBoard().board[currentRow][currentColumn - 1].getPiece() instanceof Pawn
+                        && getBoard().board[currentRow][currentColumn - 1].getPiece().getColor() != Color.BLACK
+                        && ((Pawn) getBoard().board[currentRow][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
+                    return true;
+                }
+                if (currentColumn < 8 && getBoard().board[currentRow][currentColumn + 1].getPiece() != null
+                        && getBoard().board[currentRow][currentColumn + 1].getPiece() instanceof Pawn
+                        && getBoard().board[currentRow][currentColumn + 1].getPiece().getColor() != Color.BLACK
+                        && ((Pawn) getBoard().board[currentRow][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
