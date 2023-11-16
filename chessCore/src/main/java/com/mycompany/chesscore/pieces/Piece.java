@@ -34,7 +34,15 @@ public abstract class Piece {
         this.board = board;
     }
     
-    abstract public boolean isValidMove(Square target);
+    public boolean isValidMove(Square target)
+    {
+        if (target.getPiece() != null) {
+            if (target.getPiece().getColor() == getColor()) {
+                return false;
+            }
+        }
+        return true;
+    }
     
     public void move(Square target)
     {

@@ -25,11 +25,8 @@ public class Rook extends Piece {
         Letter targetH = target.getColumn();
         Square[][] board = super.getBoard().board;
         //First check that target is empty or enemy
-        if (target.getPiece() != null) {
-            if (target.getPiece().getColor() == super.getColor()) {
-                return false;
-            }
-        }
+        super.isValidMove(target);
+        
         //check that rook is moving on a row or a column
         if (targetH == super.column) {
             Square s;

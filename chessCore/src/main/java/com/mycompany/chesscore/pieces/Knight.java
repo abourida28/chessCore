@@ -20,11 +20,8 @@ public class Knight extends Piece {
 
     @Override
     public boolean isValidMove(Square target) {
-        if (target.getPiece() != null) {
-            if (target.getPiece().getColor() == super.getColor()) {
-                return false;
-            }
-        }
+        super.isValidMove(target);
+        
         int distanceH = Math.abs(super.column.ordinal() - target.getColumn().ordinal());
         int distanceV = Math.abs(super.row - target.getRow());
         if (distanceV == 2 && distanceH == 1)
