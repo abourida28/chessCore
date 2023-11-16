@@ -8,20 +8,32 @@ import com.mycompany.chesscore.pieces.*;
 public class Pawn extends Piece {
 
     private boolean moved;
-    private boolean firstMoveDouble;
+    private boolean lastMoveDouble;
+
+    public void setMovedFalse() {
+        this.moved = false;
+    }
 
     public Pawn(Color color, int row, Letter column, ChessBoard board) {
         super(color, row, column, board);
         this.moved = false;
-        this.firstMoveDouble = false;
+        this.lastMoveDouble = false;
     }
 
     public boolean hasMovedFirstDoubleMove() {
-        return firstMoveDouble;
+        return lastMoveDouble;
     }
     
      public boolean isPromotable() {
         return (getColor() == Color.WHITE && row == 8) || (getColor() == Color.BLACK && row == 1);
+    }
+
+    @Override
+    public void move(Square target) {
+        super.move(target); 
+        moved = true;
+        if (Math.abs(target.getRow() - this.row) == 2)
+            lastMoveDouble = true;
     }
 
     public boolean promoteTo(char promoteTo) {
@@ -59,12 +71,10 @@ public class Pawn extends Piece {
         if (getColor() == Color.WHITE) {
             // White pawn moves
             if (rowDifference == 1 && columnDifference == 0 && target.getPiece() == null) {
-                moved = true;
                 // Regular one step forward
                 return true;
-            } else if (!firstMoveDouble && !moved && rowDifference == 2 && columnDifference == 0
+            } else if (!lastMoveDouble && !moved && rowDifference == 2 && columnDifference == 0
                     && target.getPiece() == null && getBoard().board[currentRow + 1][currentColumn].getPiece() == null) {
-                firstMoveDouble = true;
                 // First two steps forward
                 return true;
             } else if (rowDifference == 1 && columnDifference == 1 && target.getPiece() != null
@@ -94,12 +104,10 @@ public class Pawn extends Piece {
         } else {
             // Black pawn moves
             if (rowDifference == -1 && columnDifference == 0 && target.getPiece() == null) {
-                moved = true;
                 // Regular one step forward
                 return true;
-            } else if (!firstMoveDouble && !moved && rowDifference == -2 && columnDifference == 0
+            } else if (!lastMoveDouble && !moved && rowDifference == -2 && columnDifference == 0
                     && target.getPiece() == null && getBoard().board[currentRow - 1][currentColumn].getPiece() == null) {
-                firstMoveDouble = true;
                 // First two steps forward
                 return true;
             } else if (rowDifference == -1 && columnDifference == 1 && target.getPiece() != null

@@ -14,11 +14,22 @@ import java.lang.Math;
  * @author omara
  */
 public class King extends Piece {
+    private boolean moved;
 
+    public boolean isMoved() {
+        return moved;
+    }
     public King(Color color, int row, Letter column, ChessBoard board) {
         super(color, row, column, board);
+        moved = false;
     }
 
+    @Override
+    public void move(Square target) {
+        super.move(target);
+        moved = true;
+    }
+    
     @Override
     public boolean isValidMove(Square target) {
         super.isValidMove(target);

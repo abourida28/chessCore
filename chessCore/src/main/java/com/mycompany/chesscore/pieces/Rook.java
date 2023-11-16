@@ -14,9 +14,21 @@ import com.mycompany.chesscore.constants.Letter;
  * @author omara
  */
 public class Rook extends Piece {
-
+    
+    private boolean moved;
     public Rook(constants.Color color, int row, constants.Letter column, ChessBoard board) {
         super(color, row, column, board);
+        moved = false;
+    }
+
+    public boolean isMoved() {
+        return moved;
+    }
+
+    @Override
+    public void move(Square target) {
+        super.move(target); 
+        moved = true;
     }
 
     @Override
