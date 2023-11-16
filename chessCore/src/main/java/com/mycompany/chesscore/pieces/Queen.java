@@ -13,6 +13,7 @@ public class Queen extends Piece {
 
     @Override
     public boolean isValidMove(Square target) {
+        super.isValidMove(target);
         int targetRow = target.getRow();
         int targetColumn = target.getColumn().ordinal();
         int currentRow = this.row;
