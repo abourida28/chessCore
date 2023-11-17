@@ -44,24 +44,10 @@ public class chessGame {
         }
 
         boolean putsKingInCheck = false;
-
+        
         Piece atTarget = target.getPiece();
-        if(atTarget != null)
-        {
-            
-            if (board.whitePieces.contains(atTarget)) {
-                board.whitePieces.remove(atTarget);
-            }
-            if (board.blackPieces.contains(atTarget)) {
-                board.blackPieces.remove(atTarget);
-            }
-            if (board.whitePawns.contains(atTarget)) {
-                board.whitePawns.remove(atTarget);
-            }
-            if (board.blackPawns.contains(atTarget)) {
-                board.blackPawns.remove(atTarget);
-            }
-        }
+        
+        board.delete(atTarget);
         board.testMove(start, target);
 
         if (isCheck(hasTurn)) {
@@ -204,6 +190,16 @@ public class chessGame {
             else if (piece instanceof Pawn && piece.isValidMove(target) && ((Pawn) piece).isEnPassant()) {
                 System.out.println("Enpassant");
                 //TODO: remove eaten pawn
+                Piece eaten = null;
+                if (hasTurn == Color.WHITE)
+                {
+                    eaten = board.board[target.getRow() - 2][target.getColumn().ordinal()].getPiece();
+                }
+                if (hasTurn == Color.BLACK)
+                {
+                    eaten = board.board[target.getRow()][target.getColumn().ordinal()].getPiece();
+                }
+                board.delete(eaten);
             } // Check for capturing
             else if (target.getPiece() != null) {
                 System.out.println("Captured " + target.getPiece().getClass().getSimpleName());
@@ -284,85 +280,4 @@ public class chessGame {
 
         return true;
     }
-
-//Rest of code can be removed
-//_____________________________________________________________
-//_____________________________________________________________
-//_____________________________________________________________
-//_____________________________________________________________
-//_____________________________________________________________
-    private boolean hasInsufficientMaterial(Color color) {
-        ArrayList<Piece> pieces = (color == Color.WHITE) ? board.whitePieces : board.blackPieces;
-
-        // Check if there is only a lone king
-        if (pieces.size() == 1 && pieces.get(0) instanceof King) {
-            return true;
-        }
-
-        // Check if there is a king and a bishop
-        if (pieces.size() == 2 && containsKing(pieces) && containsBishop(pieces)) {
-            return true;
-        }
-
-        // Check if there is a king and a knight
-        if (pieces.size() == 2 && containsKing(pieces) && containsKnight(pieces)) {
-            return true;
-        }
-
-        // Check if there is a king and two knights
-        if (pieces.size() == 3 && containsKing(pieces) && containsTwoKnights(pieces)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean arePawnsOnBoard() {//WTF 3ndna arraylist of pawns asln 
-        for (int i = 0; i < 8; i++) {//check enha not empty w 5las
-            for (int j = 0; j < 8; j++) {
-                if (board.board[i][j].getPiece() instanceof Pawn) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean containsKing(ArrayList<Piece> pieces) {
-        for (Piece piece : pieces) {
-            if (piece instanceof King) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean containsBishop(ArrayList<Piece> pieces) {
-        for (Piece piece : pieces) {
-            if (piece instanceof Bishop) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean containsKnight(ArrayList<Piece> pieces) {
-        for (Piece piece : pieces) {
-            if (piece instanceof Knight) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean containsTwoKnights(ArrayList<Piece> pieces) {
-        int knightCount = 0;
-        for (Piece piece : pieces) {
-            if (piece instanceof Knight) {
-                knightCount++;
-            }
-        }
-        return knightCount == 2;
-    }
-
 }

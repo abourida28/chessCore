@@ -11,8 +11,8 @@ public class Pawn extends Piece {
     private boolean lastMoveDouble;
     private boolean enPassant = false;
 
-    public void setMovedFalse() {
-        this.moved = false;
+    public void setLastDoubleMovedFalse() {
+        this.lastMoveDouble = false;
     }
     public boolean isEnPassant(){
         return enPassant;
@@ -34,13 +34,10 @@ public class Pawn extends Piece {
 
     @Override
     public void move(Square target) {
-        System.out.println("Move Called in pawn");
-        super.move(target); 
         moved = true;
         if (Math.abs(target.getRow() - this.row) == 2)
             lastMoveDouble = true;
-        if (Math.abs(target.getRow() - this.row) == -2)
-            lastMoveDouble = true;
+        super.move(target); 
     }
 
     public boolean promoteTo(char promoteTo) {
@@ -91,17 +88,17 @@ public class Pawn extends Piece {
             } else if (rowDifference == 1 && columnDifference == 1 && target.getPiece() == null) {
                 // En passant capture (check both sides)
                 if(targetColumn < currentColumn){
-                     if (currentColumn > 1 && getBoard().board[currentRow][currentColumn - 1].getPiece() != null
-                        && getBoard().board[currentRow][currentColumn - 1].getPiece() instanceof Pawn
-                        && getBoard().board[currentRow][currentColumn - 1].getPiece().getColor() != Color.WHITE
-                        && ((Pawn) getBoard().board[currentRow][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
+                     if (currentColumn > 1 && getBoard().board[currentRow - 1][currentColumn - 1].getPiece() != null
+                        && getBoard().board[currentRow - 1][currentColumn - 1].getPiece() instanceof Pawn
+                        && getBoard().board[currentRow - 1][currentColumn - 1].getPiece().getColor() != Color.WHITE
+                        && ((Pawn) getBoard().board[currentRow - 1][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
                          enPassant = true;
                          return true;
                 }else{
-                      if (currentColumn < 8 && getBoard().board[currentRow][currentColumn + 1].getPiece() != null
-                        && getBoard().board[currentRow][currentColumn + 1].getPiece() instanceof Pawn
-                        && getBoard().board[currentRow][currentColumn + 1].getPiece().getColor() != Color.WHITE
-                        && ((Pawn) getBoard().board[currentRow][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
+                      if (currentColumn < 8 && getBoard().board[currentRow - 1][currentColumn + 1].getPiece() != null
+                        && getBoard().board[currentRow - 1][currentColumn + 1].getPiece() instanceof Pawn
+                        && getBoard().board[currentRow - 1][currentColumn + 1].getPiece().getColor() != Color.WHITE
+                        && ((Pawn) getBoard().board[currentRow - 1][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
                           enPassant = true;
                           return true;
                 }      
@@ -125,19 +122,19 @@ public class Pawn extends Piece {
             } else if (rowDifference == -1 && columnDifference == 1 && target.getPiece() == null) {
                 // En passant capture (check both sides)
                 if(targetColumn < currentColumn){
-                     if (currentColumn > 1 && getBoard().board[currentRow][currentColumn - 1].getPiece() != null
-                        && getBoard().board[currentRow][currentColumn - 1].getPiece() instanceof Pawn
-                        && getBoard().board[currentRow][currentColumn - 1].getPiece().getColor() != Color.BLACK
-                        && ((Pawn) getBoard().board[currentRow][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
+                     if (currentColumn > 1 && getBoard().board[currentRow - 1][currentColumn - 1].getPiece() != null
+                        && getBoard().board[currentRow - 1][currentColumn - 1].getPiece() instanceof Pawn
+                        && getBoard().board[currentRow - 1][currentColumn - 1].getPiece().getColor() != Color.BLACK
+                        && ((Pawn) getBoard().board[currentRow - 1][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
                          enPassant = true;
                          //System.out.println("EN PASSANT");
                     return true;
                 }
                 }else{
-                      if (currentColumn < 8 && getBoard().board[currentRow][currentColumn + 1].getPiece() != null
-                        && getBoard().board[currentRow][currentColumn + 1].getPiece() instanceof Pawn
-                        && getBoard().board[currentRow][currentColumn + 1].getPiece().getColor() != Color.BLACK
-                        && ((Pawn) getBoard().board[currentRow][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
+                      if (currentColumn < 8 && getBoard().board[currentRow - 1][currentColumn + 1].getPiece() != null
+                        && getBoard().board[currentRow - 1][currentColumn + 1].getPiece() instanceof Pawn
+                        && getBoard().board[currentRow - 1][currentColumn + 1].getPiece().getColor() != Color.BLACK
+                        && ((Pawn) getBoard().board[currentRow - 1][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
                           enPassant = true;
                           //System.out.println("EN PASSANT");
                     return true;

@@ -99,37 +99,43 @@ public class ChessBoard {
         finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
         if (start.getPiece().getColor() == constants.Color.WHITE) {
             for (Pawn pawn : whitePawns) {
-                pawn.setMovedFalse();
+                pawn.setLastDoubleMovedFalse();
             }
         }
         if (start.getPiece().getColor() == constants.Color.BLACK) {
             for (Pawn pawn : blackPawns) {
-                pawn.setMovedFalse();
+                pawn.setLastDoubleMovedFalse();
             }
         }
         Piece atFinish = finish.getPiece();
-        if (atFinish != null)
-        {
-         
-            if (whitePieces.contains(atFinish)) {
-                whitePieces.remove(atFinish);
-            }
-            if (blackPieces.contains(atFinish)) {
-                blackPieces.remove(atFinish);
-            }
-            if (whitePawns.contains(atFinish)) {
-                whitePawns.remove(atFinish);
-            }
-            if (blackPawns.contains(atFinish)) {
-                blackPawns.remove(atFinish);
-            }
-        }
+        delete(atFinish);
+        
         Piece piece = start.getPiece();
         finish.setPiece(piece);
         start.setPiece(null);
         piece.move(finish);
     }
 
+    protected void delete(Piece piece)
+    {
+        if (piece != null)
+        {
+            board[piece.getSquare().getRow() - 1][piece.getSquare().getColumn().ordinal()].setPiece(null);
+            if (whitePieces.contains(piece)) {
+                whitePieces.remove(piece);
+            }
+            if (blackPieces.contains(piece)) {
+                blackPieces.remove(piece);
+            }
+            if (whitePawns.contains(piece)) {
+                whitePawns.remove(piece);
+            }
+            if (blackPawns.contains(piece)) {
+                blackPawns.remove(piece);
+            }
+        }
+    }
+    
     protected void testMove(Square start, Square finish)
     {
         start = board[start.getRow() - 1][start.getColumn().ordinal()];
