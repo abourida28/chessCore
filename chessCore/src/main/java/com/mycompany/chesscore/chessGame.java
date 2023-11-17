@@ -38,19 +38,30 @@ public class chessGame {
             return false;
         }
 
-//        if (start.getPiece().getColor() != hasTurn) {
-//            System.out.println("Not turn");
-//            return false;
-//        }
         if (!start.getPiece().isValidMove(target)) {
-            //System.out.println("Piece don't move like that");
+//            System.out.println("Piece don't move like that");
             return false;
         }
 
         boolean putsKingInCheck = false;
 
         Piece atTarget = target.getPiece();
-
+        if(atTarget != null)
+        {
+            
+            if (board.whitePieces.contains(atTarget)) {
+                board.whitePieces.remove(atTarget);
+            }
+            if (board.blackPieces.contains(atTarget)) {
+                board.blackPieces.remove(atTarget);
+            }
+            if (board.whitePawns.contains(atTarget)) {
+                board.whitePawns.remove(atTarget);
+            }
+            if (board.blackPawns.contains(atTarget)) {
+                board.blackPawns.remove(atTarget);
+            }
+        }
         board.testMove(start, target);
 
         if (isCheck(hasTurn)) {
@@ -59,7 +70,25 @@ public class chessGame {
 
         board.testMove(target, start);
         target.setPiece(atTarget);
-
+        if (atTarget != null)
+        {
+        if(hasTurn == Color.WHITE)
+        {
+            board.blackPieces.add(atTarget);
+            if (atTarget instanceof Pawn)
+                board.blackPawns.add((Pawn) atTarget); 
+        }
+        if(hasTurn == Color.BLACK)
+        {
+            board.whitePieces.add(atTarget);
+            if (atTarget instanceof Pawn)
+                board.whitePawns.add((Pawn) atTarget); 
+        }
+            
+        }
+        
+        if (putsKingInCheck)
+            System.out.println("Puts king in check");
         return !putsKingInCheck;
     }
 
@@ -89,9 +118,9 @@ public class chessGame {
     }
 
     private boolean isCheckMate(Color color) {
-        if (!isCheck(color)) {
-            return false;
-        }
+//        if (!isCheck(color)) {
+//            return false;
+//        }
 
         ArrayList<Square> availableMoves;
         if (color == Color.WHITE) {
@@ -158,8 +187,15 @@ public class chessGame {
             return;
         }
 
+        
+        
+        
         Piece piece = start.getPiece();
         if (isValid(start, target)) {
+            if (start.getPiece().getColor() != hasTurn) {
+            System.out.println("Not turn");
+            return;
+        }
             // Check for castling need to be implmented in king with all its conditons
             if (piece instanceof King && Math.abs(start.getColumn().ordinal() - target.getColumn().ordinal()) == 2) {
                 System.out.println("Castle");
@@ -208,12 +244,7 @@ public class chessGame {
     }
 
     private boolean isInsufficientMaterial() {
-        // Check if both sides have insufficient material
-//        if (hasInsufficientMaterial(Color.WHITE) && hasInsufficientMaterial(Color.BLACK)) {
-//            // No pawns on the board
-//            return !arePawnsOnBoard();
-//        }
-//        return false;
+        
         if (!board.blackPawns.isEmpty() || !board.whitePawns.isEmpty()) {
             return false;
         }

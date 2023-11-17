@@ -107,6 +107,23 @@ public class ChessBoard {
                 pawn.setMovedFalse();
             }
         }
+        Piece atFinish = finish.getPiece();
+        if (atFinish != null)
+        {
+         
+            if (whitePieces.contains(atFinish)) {
+                whitePieces.remove(atFinish);
+            }
+            if (blackPieces.contains(atFinish)) {
+                blackPieces.remove(atFinish);
+            }
+            if (whitePawns.contains(atFinish)) {
+                whitePawns.remove(atFinish);
+            }
+            if (blackPawns.contains(atFinish)) {
+                blackPawns.remove(atFinish);
+            }
+        }
         Piece piece = start.getPiece();
         finish.setPiece(piece);
         start.setPiece(null);
