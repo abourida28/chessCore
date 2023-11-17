@@ -62,10 +62,10 @@ public class Rook extends Piece {
                         return false;
                     }
                 }
-                return true;
             }
+                return true;
         } //check if rook is moving horizontally
-        else if (targetH == super.column) {
+        else if (targetV == super.row) {
             Square s;
             //check if moving to the right
             if (targetH.ordinal() > super.column.ordinal()) {
@@ -87,8 +87,8 @@ public class Rook extends Piece {
                         }
                     }
                 }
-                return true;
             }
+                return true;
         }
         return false;
 
