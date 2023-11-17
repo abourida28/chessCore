@@ -34,6 +34,7 @@ public class Pawn extends Piece {
 
     @Override
     public void move(Square target) {
+        System.out.println("Move Called in pawn");
         super.move(target); 
         moved = true;
         if (Math.abs(target.getRow() - this.row) == 2)

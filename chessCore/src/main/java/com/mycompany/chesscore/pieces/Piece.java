@@ -13,6 +13,14 @@ import com.mycompany.chesscore.constants.Color;
  */
 public abstract class Piece {
     protected int row;
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setColumn(Letter column) {
+        this.column = column;
+    }
     protected Letter column;
 
     public Color getColor() {

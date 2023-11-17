@@ -21,102 +21,70 @@ import java.util.ArrayList;
  * @author omara
  */
 public class ChessBoard {
+
     public Square[][] board = new Square[8][8];
     ArrayList<Pawn> whitePawns;
     ArrayList<Pawn> blackPawns;
     ArrayList<Piece> whitePieces;
     ArrayList<Piece> blackPieces;
-    public ChessBoard()
-    {
+
+    public ChessBoard() {
         Piece piece;
         whitePawns = new ArrayList<Pawn>();
         blackPawns = new ArrayList<Pawn>();
         whitePieces = new ArrayList<Piece>();
         blackPieces = new ArrayList<Piece>();
-        for (int number = 1; number <= 8; number++)
-        {
-            for (Letter letter : Letter.values())
-            {
+        for (int number = 1; number <= 8; number++) {
+            for (Letter letter : Letter.values()) {
                 board[number - 1][letter.ordinal()] = new Square(number, letter);
-                
-                if (number == 2)
-                {
+
+                if (number == 2) {
                     piece = new Pawn(constants.Color.WHITE, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     whitePawns.add((Pawn) piece);
                     whitePieces.add(piece);
-                }
-                else if (number == 7)
-                {
+                } else if (number == 7) {
                     piece = new Pawn(constants.Color.BLACK, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     blackPawns.add((Pawn) piece);
                     blackPieces.add(piece);
-                }
-                else if (number == 1 && (letter == Letter.A || letter == Letter.H))
-                {
+                } else if (number == 1 && (letter == Letter.A || letter == Letter.H)) {
                     piece = new Rook(constants.Color.WHITE, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     whitePieces.add(piece);
-                }
-                else if (number == 8 && (letter == Letter.A || letter == Letter.H))
-                {
+                } else if (number == 8 && (letter == Letter.A || letter == Letter.H)) {
                     piece = new Rook(constants.Color.BLACK, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     blackPieces.add(piece);
-                }
-                
-                else if (number == 1 && (letter == Letter.B || letter == Letter.G))
-                {
+                } else if (number == 1 && (letter == Letter.B || letter == Letter.G)) {
                     piece = new Knight(constants.Color.WHITE, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     whitePieces.add(piece);
-                }
-                
-                else if (number == 8 && (letter == Letter.B || letter == Letter.G))
-                {
+                } else if (number == 8 && (letter == Letter.B || letter == Letter.G)) {
                     piece = new Knight(constants.Color.BLACK, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     blackPieces.add(piece);
-                }
-                
-                else if (number == 1 && (letter == Letter.C || letter == Letter.F))
-                {
+                } else if (number == 1 && (letter == Letter.C || letter == Letter.F)) {
                     piece = new Bishop(constants.Color.WHITE, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     whitePieces.add(piece);
-                }
-                
-                else if (number == 8 && (letter == Letter.C || letter == Letter.F))
-                {
+                } else if (number == 8 && (letter == Letter.C || letter == Letter.F)) {
                     piece = new Bishop(constants.Color.BLACK, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     blackPieces.add(piece);
-                }
-                
-                else if (number == 1 && letter == Letter.D)
-                {
+                } else if (number == 1 && letter == Letter.D) {
                     piece = new Queen(constants.Color.WHITE, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     whitePieces.add(piece);
-                }
-                
-                else if (number == 8 && letter == Letter.D)
-                {
+                } else if (number == 8 && letter == Letter.D) {
                     piece = new Queen(constants.Color.BLACK, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     blackPieces.add(piece);
-                }
-                
-                else if (number == 1 && letter == Letter.E)
-                {
+                } else if (number == 1 && letter == Letter.E) {
                     piece = new King(constants.Color.WHITE, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     whitePieces.add(piece);
-                }
-                
-                else if (number == 8 && letter == Letter.E)
-                {
+                } else if (number == 8 && letter == Letter.E) {
                     piece = new King(constants.Color.BLACK, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
                     blackPieces.add(piece);
@@ -124,19 +92,18 @@ public class ChessBoard {
             }
         }
     }
-    protected void move(Square start, Square finish)
-    {
-        if(start.getPiece().getColor() == constants.Color.WHITE)
-        {
-            for(Pawn pawn : whitePawns)
-            {
+
+    protected void move(Square start, Square finish) {
+        System.out.println("Move called in board");
+        start = board[start.getRow() - 1][start.getColumn().ordinal()];
+        finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
+        if (start.getPiece().getColor() == constants.Color.WHITE) {
+            for (Pawn pawn : whitePawns) {
                 pawn.setMovedFalse();
             }
         }
-        if(start.getPiece().getColor() == constants.Color.BLACK)
-        {
-            for(Pawn pawn : blackPawns)
-            {
+        if (start.getPiece().getColor() == constants.Color.BLACK) {
+            for (Pawn pawn : blackPawns) {
                 pawn.setMovedFalse();
             }
         }
@@ -145,30 +112,38 @@ public class ChessBoard {
         start.setPiece(null);
         piece.move(finish);
     }
-    
-    protected Square findKing(Color color)
+
+    protected void testMove(Square start, Square finish)
     {
-        if (color == Color.WHITE)
-        {
-            for (Piece piece : whitePieces)
-            {
-                if (piece instanceof King)
-                    return piece.getSquare();
-            }
-        }
+        start = board[start.getRow() - 1][start.getColumn().ordinal()];
+        finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
         
-        else
-        {
-            for (Piece piece : blackPieces)
-            {
-                if (piece instanceof King)
+        Piece piece = start.getPiece();
+        finish.setPiece(piece);
+        start.setPiece(null);
+         
+        piece.setRow(finish.getRow());
+        piece.setColumn(finish.getColumn());
+    }
+    
+    protected Square findKing(Color color) {
+        if (color == Color.WHITE) {
+            for (Piece piece : whitePieces) {
+                if (piece instanceof King) {
                     return piece.getSquare();
+                }
+            }
+        } else {
+            for (Piece piece : blackPieces) {
+                if (piece instanceof King) {
+                    return piece.getSquare();
+                }
             }
         }
         return null;
     }
-    
-     public boolean isSafe(Square square, Color color) {
+
+    public boolean isSafe(Square square, Color color) {
         if (color == Color.WHITE) {
             for (Piece piece : blackPieces) {
                 if (piece.isValidMove(square)) {
@@ -183,5 +158,35 @@ public class ChessBoard {
             }
         }
         return false;
+    }
+
+    protected void print() {
+        System.out.println("");
+        System.out.println("");
+        for (int number = 8; number >= 1; number--) {
+            for (Letter letter : Letter.values()) {
+                if (board[number - 1][letter.ordinal()].getPiece() == null)
+                {
+                    if ((number + letter.ordinal()) % 2 == 1)
+                        System.out.print("_");
+                    else
+                        System.out.print("_");
+                }
+                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Pawn)
+                        System.out.print("P");
+                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Rook)
+                        System.out.print("R");
+                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Knight)
+                        System.out.print("N");
+                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Bishop)
+                        System.out.print("B");
+                else if (board[number - 1][letter.ordinal()].getPiece() instanceof King)
+                        System.out.print("K");
+                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Queen)
+                        System.out.print("Q");
+            }
+            System.out.println("");
+        }
+        System.out.println("*********************************");
     }
 }
