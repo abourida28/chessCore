@@ -100,7 +100,7 @@ public class chessGame {
         } else {
             kingSquare = board.findKing(color);
         }
-        return board.isSafe(kingSquare, color);
+        return board.isDangerous(kingSquare, color);
     }
 
     private boolean isCheckMate(Color color) {

@@ -166,7 +166,7 @@ public class ChessBoard {
         return null;
     }
 
-    public boolean isSafe(Square square, Color color) {
+    public boolean isDangerous(Square square, Color color) {
         if (color == Color.WHITE) {
             for (Piece piece : blackPieces) {
                 if (piece.isValidMove(square)) {

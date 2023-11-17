@@ -48,14 +48,14 @@ public class King extends Piece {
         else if (distanceH == 2 && distanceV == 0 && !moved) {
             Rook rook = null;
             boolean safe = true;
-            if (!super.getBoard().isSafe(super.getSquare(), super.getColor())) {
+            if (super.getBoard().isDangerous(super.getSquare(), super.getColor())) {
                 safe = false;
             }
             if (target.getColumn() == Letter.G) {
                 rook = (Rook) super.getBoard().board[super.row - 1][Letter.H.ordinal()].getPiece();
                 Square square = new Square(super.row, Letter.F);
 
-                if (!super.getBoard().isSafe(square, super.getColor())) {
+                if (super.getBoard().isDangerous(square, super.getColor())) {
                     safe = false;
                 }
 
@@ -63,7 +63,7 @@ public class King extends Piece {
                 rook = (Rook) super.getBoard().board[super.row - 1][Letter.A.ordinal()].getPiece();
                 Square square = new Square(super.row, Letter.D);
 
-                if (!super.getBoard().isSafe(square, super.getColor())) {
+                if (super.getBoard().isDangerous(square, super.getColor())) {
                     safe = false;
                 }
             }
