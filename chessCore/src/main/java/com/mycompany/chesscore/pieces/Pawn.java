@@ -9,9 +9,13 @@ public class Pawn extends Piece {
 
     private boolean moved;
     private boolean lastMoveDouble;
+    private boolean enPassant = false;
 
     public void setMovedFalse() {
         this.moved = false;
+    }
+    public boolean isEnPassant(){
+        return enPassant;
     }
 
     public Pawn(Color color, int row, Letter column, ChessBoard board) {
@@ -88,12 +92,14 @@ public class Pawn extends Piece {
                         && getBoard().board[currentRow][currentColumn - 1].getPiece() instanceof Pawn
                         && getBoard().board[currentRow][currentColumn - 1].getPiece().getColor() != Color.WHITE
                         && ((Pawn) getBoard().board[currentRow][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
+                         enPassant = true;
                          return true;
                 }else{
                       if (currentColumn < 8 && getBoard().board[currentRow][currentColumn + 1].getPiece() != null
                         && getBoard().board[currentRow][currentColumn + 1].getPiece() instanceof Pawn
                         && getBoard().board[currentRow][currentColumn + 1].getPiece().getColor() != Color.WHITE
                         && ((Pawn) getBoard().board[currentRow][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
+                          enPassant = true;
                           return true;
                 }      
                  }
@@ -119,7 +125,8 @@ public class Pawn extends Piece {
                         && getBoard().board[currentRow][currentColumn - 1].getPiece() instanceof Pawn
                         && getBoard().board[currentRow][currentColumn - 1].getPiece().getColor() != Color.BLACK
                         && ((Pawn) getBoard().board[currentRow][currentColumn - 1].getPiece()).hasMovedFirstDoubleMove()) {
-                         System.out.println("EN PASSANT");
+                         enPassant = true;
+                         //System.out.println("EN PASSANT");
                     return true;
                 }
                 }else{
@@ -127,7 +134,8 @@ public class Pawn extends Piece {
                         && getBoard().board[currentRow][currentColumn + 1].getPiece() instanceof Pawn
                         && getBoard().board[currentRow][currentColumn + 1].getPiece().getColor() != Color.BLACK
                         && ((Pawn) getBoard().board[currentRow][currentColumn + 1].getPiece()).hasMovedFirstDoubleMove()) {
-                          System.out.println("EN PASSANT");
+                          enPassant = true;
+                          //System.out.println("EN PASSANT");
                     return true;
                 }
                 }

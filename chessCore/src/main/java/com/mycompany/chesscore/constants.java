@@ -12,7 +12,10 @@ public class constants {
 
     public enum Color {
         WHITE,
-        BLACK
+        BLACK;
+     public Color getOpponentColor() {
+        return (this == WHITE) ? BLACK : WHITE;
+    }
     }
     public enum Letter
     {
