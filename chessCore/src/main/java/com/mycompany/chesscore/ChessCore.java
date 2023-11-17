@@ -24,10 +24,13 @@ public class ChessCore {
                 String moveString = scanner.nextLine();
                 String[] moveTokens = moveString.split(",");
                 if (moveTokens.length == 2) {
+                    game.move(moveTokens[0].trim(), moveTokens[1].trim(),"");
                     // Parse move coordinates
                     // Make the move
-                    game.move(moveTokens[0].trim(), moveTokens[1].trim());
                 }
+                 else if(moveTokens.length == 3){
+                    game.move(moveTokens[0],moveTokens[1],moveTokens[2]);
+                 }
                 else {
                     System.out.println("Invalid move format: " + moveString);
                 }

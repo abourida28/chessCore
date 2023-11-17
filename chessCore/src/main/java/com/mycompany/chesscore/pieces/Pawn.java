@@ -40,27 +40,6 @@ public class Pawn extends Piece {
         super.move(target); 
     }
 
-    public boolean promoteTo(char promoteTo) {
-        // to be implemented put newPiece with the corresponding Case either in pawn class of gamelogic class
-//        Piece newPiece;
-        switch (promoteTo) {
-            case 'K':
-//                getBoard().board[row - 1][column.ordinal()].setPiece(newPiece);
-                return true;
-            case 'B':
-//                getBoard().board[row - 1][column.ordinal()].setPiece(newPiece);
-                return true;
-            case 'R':
-//                getBoard().board[row - 1][column.ordinal()].setPiece(newPiece);
-                return true;
-            case 'Q':
-//                getBoard().board[row - 1][column.ordinal()].setPiece(newPiece);
-                return true;
-            default:
-                return false;
-        }
-    }
-
     @Override
     public boolean isValidMove(Square target) {
         super.isValidMove(target);

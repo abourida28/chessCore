@@ -100,9 +100,9 @@ public class chessGame {
     }
 
     private boolean isCheckMate(Color color) {
-//        if (!isCheck(color)) {
-//            return false;
-//        }
+        if (!isCheck(color)) {
+            return false;
+        }
 
         ArrayList<Square> availableMoves;
         if (color == Color.WHITE) {
@@ -157,7 +157,7 @@ public class chessGame {
         return true;
     }
 
-    public void move(String startStr, String targetStr) {
+    public void move(String startStr, String targetStr,String promoteStr) {
         Square start = Square.parseSquare(startStr);
         Square target = Square.parseSquare(targetStr);
 
@@ -208,6 +208,23 @@ public class chessGame {
 
             // Move the piece on the board
             board.move(start, target);
+            
+            
+           if(!promoteStr.equals("") && target.getPiece() instanceof Pawn && ((Pawn) target.getPiece()).isPromotable()){
+             if("K".equals(promoteStr)){
+                 Knight knight = new Knight(hasTurn,target.getRow(),target.getColumn(),board);
+                 target.setPiece(knight);
+             }else if("B".equals(promoteStr)){
+                 Bishop bishop = new Bishop(hasTurn,target.getRow(),target.getColumn(),board);
+                 target.setPiece(bishop);
+             }else if("Q".equals(promoteStr)){
+                 Queen queen = new Queen(hasTurn,target.getRow(),target.getColumn(),board);
+                 target.setPiece(queen);
+             }else if("R".equals(promoteStr)){
+                 Rook rook = new Rook(hasTurn,target.getRow(),target.getColumn(),board);
+                 target.setPiece(rook); 
+             }
+    }
 
             // Check for checkmate or stalemate
             if (isCheckMate(hasTurn.getOpponentColor())) {
