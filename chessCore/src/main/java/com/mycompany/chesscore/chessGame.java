@@ -34,19 +34,18 @@ public class chessGame {
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
         if (start.getPiece() == null) {
-            System.out.println("No piece");
             return false;
         }
 
         if (!start.getPiece().isValidMove(target)) {
-//            System.out.println("Piece don't move like that");
+//                                 System.out.println("Piece don't move like that");
             return false;
         }
 
         boolean putsKingInCheck = false;
-        
+
         Piece atTarget = target.getPiece();
-        
+
         board.delete(atTarget);
         board.testMove(start, target);
 
@@ -56,25 +55,22 @@ public class chessGame {
 
         board.testMove(target, start);
         target.setPiece(atTarget);
-        if (atTarget != null)
-        {
-        if(hasTurn == Color.WHITE)
-        {
-            board.blackPieces.add(atTarget);
-            if (atTarget instanceof Pawn)
-                board.blackPawns.add((Pawn) atTarget); 
+        if (atTarget != null) {
+            if (hasTurn == Color.WHITE) {
+                board.blackPieces.add(atTarget);
+                if (atTarget instanceof Pawn) {
+                    board.blackPawns.add((Pawn) atTarget);
+                }
+            }
+            if (hasTurn == Color.BLACK) {
+                board.whitePieces.add(atTarget);
+                if (atTarget instanceof Pawn) {
+                    board.whitePawns.add((Pawn) atTarget);
+                }
+            }
+
         }
-        if(hasTurn == Color.BLACK)
-        {
-            board.whitePieces.add(atTarget);
-            if (atTarget instanceof Pawn)
-                board.whitePawns.add((Pawn) atTarget); 
-        }
-            
-        }
-        
-        if (putsKingInCheck)
-            System.out.println("Puts king in check");
+
         return !putsKingInCheck;
     }
 
@@ -164,7 +160,7 @@ public class chessGame {
     public void move(String startStr, String targetStr) {
         Square start = Square.parseSquare(startStr);
         Square target = Square.parseSquare(targetStr);
-        
+
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
 
@@ -173,30 +169,35 @@ public class chessGame {
             return;
         }
 
-        
-        
-        
         Piece piece = start.getPiece();
         if (isValid(start, target)) {
             if (start.getPiece().getColor() != hasTurn) {
-            System.out.println("Not turn");
-            return;
-        }
+                System.out.println("Not turn");
+                return;
+            }
             // Check for castling need to be implmented in king with all its conditons
             if (piece instanceof King && Math.abs(start.getColumn().ordinal() - target.getColumn().ordinal()) == 2) {
                 System.out.println("Castle");
-                //TODO: move rook
+                Rook rook = null;
+                Square newRookPlace = null;
+            if (target.getColumn() == constants.Letter.G) {
+                rook = (Rook) board.board[start.getRow() - 1][constants.Letter.H.ordinal()].getPiece();
+                newRookPlace = new Square(start.getRow(), constants.Letter.F);
+            } 
+            if (target.getColumn() == constants.Letter.C) {
+                rook = (Rook) board.board[start.getRow() - 1][constants.Letter.A.ordinal()].getPiece();
+                newRookPlace = new Square(start.getRow(), constants.Letter.D);
+            }
+            board.move(rook.getSquare(), newRookPlace);
             } // Check for en-passant
             else if (piece instanceof Pawn && piece.isValidMove(target) && ((Pawn) piece).isEnPassant()) {
                 System.out.println("Enpassant");
                 //TODO: remove eaten pawn
                 Piece eaten = null;
-                if (hasTurn == Color.WHITE)
-                {
+                if (hasTurn == Color.WHITE) {
                     eaten = board.board[target.getRow() - 2][target.getColumn().ordinal()].getPiece();
                 }
-                if (hasTurn == Color.BLACK)
-                {
+                if (hasTurn == Color.BLACK) {
                     eaten = board.board[target.getRow()][target.getColumn().ordinal()].getPiece();
                 }
                 board.delete(eaten);
@@ -226,13 +227,6 @@ public class chessGame {
             // Switch turn
             hasTurn = hasTurn.getOpponentColor();
 
-            // Check if the move puts the king in checkmate
-//                if (putsKingInCheck && isCheckMate(hasTurn)) {
-//                    System.out.println(hasTurn + " Won");
-//                }
-//            } else {
-//                System.out.println("Invalid move");
-//            }
         } else {
             System.out.println("Invalid move");
         }
@@ -240,7 +234,7 @@ public class chessGame {
     }
 
     private boolean isInsufficientMaterial() {
-        
+
         if (!board.blackPawns.isEmpty() || !board.whitePawns.isEmpty()) {
             return false;
         }

@@ -66,6 +66,8 @@ public class King extends Piece {
                 if (super.getBoard().isDangerous(square, super.getColor())) {
                     safe = false;
                 }
+                if (super.getBoard().board[super.row - 1][Letter.B.ordinal()].getPiece() != null)
+                    safe = false;
             }
 
             if ((!rook.isMoved()) && safe) {

@@ -94,7 +94,6 @@ public class ChessBoard {
     }
 
     protected void move(Square start, Square finish) {
-        System.out.println("Move called in board");
         start = board[start.getRow() - 1][start.getColumn().ordinal()];
         finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
         if (start.getPiece().getColor() == constants.Color.WHITE) {

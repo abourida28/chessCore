@@ -27,7 +27,8 @@ public class ChessCore {
                     // Parse move coordinates
                     // Make the move
                     game.move(moveTokens[0].trim(), moveTokens[1].trim());
-                } else {
+                }
+                else {
                     System.out.println("Invalid move format: " + moveString);
                 }
             }
