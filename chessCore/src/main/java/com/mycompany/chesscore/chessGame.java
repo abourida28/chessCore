@@ -23,6 +23,12 @@ public class chessGame {
     }
 
     public boolean isValid(Square start, Square target) {
+        if (start.getPiece() == null)
+            return false;
+        
+        if (start.getPiece().getColor() != hasTurn)
+            return false;
+        
         if (!start.getPiece().isValidMove(target))
             return false;
         
@@ -62,25 +68,10 @@ public class chessGame {
         } else {
             kingSquare = board.findKing(color);
         }
-        return isSafe(kingSquare, color);
+        return board.isSafe(kingSquare, color);
     }
 
-    private boolean isSafe(Square square, Color color) {
-        if (color == Color.WHITE) {
-            for (Piece piece : board.blackPieces) {
-                if (piece.isValidMove(square)) {
-                    return true;
-                }
-            }
-        } else if (color == Color.BLACK) {
-            for (Piece piece : board.whitePieces) {
-                if (piece.isValidMove(square)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+   
 
     private boolean isCheckMate(Color color) {
         if (!isCheck(color)) {

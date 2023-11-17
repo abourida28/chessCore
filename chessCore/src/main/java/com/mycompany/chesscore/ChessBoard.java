@@ -167,4 +167,21 @@ public class ChessBoard {
         }
         return null;
     }
+    
+     public boolean isSafe(Square square, Color color) {
+        if (color == Color.WHITE) {
+            for (Piece piece : blackPieces) {
+                if (piece.isValidMove(square)) {
+                    return true;
+                }
+            }
+        } else if (color == Color.BLACK) {
+            for (Piece piece : whitePieces) {
+                if (piece.isValidMove(square)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
