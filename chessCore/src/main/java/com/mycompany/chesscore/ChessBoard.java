@@ -166,6 +166,7 @@ public class ChessBoard {
     }
 
     public boolean isDangerous(Square square, Color color) {
+        square = board[square.getRow() - 1][square.getColumn().ordinal()];
         if (color == Color.WHITE) {
             for (Piece piece : blackPieces) {
                 if (piece.isValidMove(square)) {

@@ -30,7 +30,7 @@ public class chessGame {
         isEnded = false;
     }
 
-    public boolean isValid(Square start, Square target) {
+    public boolean isValid(Square start, Square target, Color color) {
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
         if (start.getPiece() == null) {
@@ -49,20 +49,20 @@ public class chessGame {
         board.delete(atTarget);
         board.testMove(start, target);
 
-        if (isCheck(hasTurn)) {
+        if (isCheck(color)) {
             putsKingInCheck = true;
         }
 
         board.testMove(target, start);
         target.setPiece(atTarget);
         if (atTarget != null) {
-            if (hasTurn == Color.WHITE) {
+            if (color == Color.WHITE) {
                 board.blackPieces.add(atTarget);
                 if (atTarget instanceof Pawn) {
                     board.blackPawns.add((Pawn) atTarget);
                 }
             }
-            if (hasTurn == Color.BLACK) {
+            if (color == Color.BLACK) {
                 board.whitePieces.add(atTarget);
                 if (atTarget instanceof Pawn) {
                     board.whitePawns.add((Pawn) atTarget);
@@ -80,8 +80,9 @@ public class chessGame {
         Square square;
         for (int number = 1; number <= 8; number++) {
             for (constants.Letter letter : constants.Letter.values()) {
-                square = new Square(number, letter);
-                if (isValid(start, square)) {
+//                square = new Square(number, letter);
+                square = board.board[number - 1][letter.ordinal()];
+                if (isValid(start, square, start.getPiece().getColor())) {
                     availableMoves.add(square);
                 }
             }
@@ -133,8 +134,9 @@ public class chessGame {
 
                 for (int number = 1; number <= 8; number++) {
                     for (constants.Letter letter : constants.Letter.values()) {
-                        square = new Square(number, letter);
-                        if (isValid(piece.getSquare(), square)) {
+//                        square = new Square(number, letter);
+                        square = board.board[number - 1][letter.ordinal()];
+                        if (isValid(piece.getSquare(), square, color)) {
                             return false;
                         }
                     }
@@ -145,8 +147,9 @@ public class chessGame {
             for (Piece piece : board.blackPieces) {
                 for (int number = 1; number <= 8; number++) {
                     for (constants.Letter letter : constants.Letter.values()) {
-                        square = new Square(number, letter);
-                        if (isValid(piece.getSquare(), square)) {
+//                        square = new Square(number, letter);
+                        square = board.board[number - 1][letter.ordinal()];
+                        if (isValid(piece.getSquare(), square, color)) {
                             return false;
                         }
                     }
@@ -170,7 +173,7 @@ public class chessGame {
         }
 
         Piece piece = start.getPiece();
-        if (isValid(start, target)) {
+        if (isValid(start, target, hasTurn)) {
             if (start.getPiece().getColor() != hasTurn) {
                 System.out.println("Not turn");
                 return;
@@ -247,7 +250,7 @@ public class chessGame {
         } else {
             System.out.println("Invalid move");
         }
-        board.print();
+//        board.print();
     }
 
     private boolean isInsufficientMaterial() {

@@ -92,7 +92,6 @@ public class Pawn extends Piece {
             } else if (!lastMoveDouble &&!moved && rowDifference == -2 && columnDifference == 0
                     && target.getPiece() == null && getBoard().board[currentRow - 2][currentColumn].getPiece() == null) {
                 // First two steps forward
-                System.out.println("2 steps okayed for black");
                 return true;
             } else if (rowDifference == -1 && columnDifference == 1 && target.getPiece() != null
                     && target.getPiece().getColor() == Color.WHITE) {

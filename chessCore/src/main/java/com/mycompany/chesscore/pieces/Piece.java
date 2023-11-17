@@ -60,7 +60,7 @@ public abstract class Piece {
     
     public Square getSquare()
     {
-        Square square = new Square(row, column);
+        Square square = board.board[row - 1][column.ordinal()];
         return square;
     }
     
