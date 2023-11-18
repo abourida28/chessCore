@@ -131,29 +131,37 @@ public class chessGame {
         Square square;
         if (color == Color.WHITE) {
             for (Piece piece : board.whitePieces) {
-
-                for (int number = 1; number <= 8; number++) {
-                    for (constants.Letter letter : constants.Letter.values()) {
-//                        square = new Square(number, letter);
-                        square = board.board[number - 1][letter.ordinal()];
-                        if (isValid(piece.getSquare(), square, color)) {
-                            return false;
-                        }
-                    }
+                availableMoves = getAllValid(piece.getSquare());
+                if (!availableMoves.isEmpty()) {
+                    return false;
                 }
+            
+//                for (int number = 1; number <= 8; number++) {
+//                    for (constants.Letter letter : constants.Letter.values()) {
+////                        square = new Square(number, letter);
+//                        square = board.board[number - 1][letter.ordinal()];
+//                        if (isValid(piece.getSquare(), square, color)) {
+//                            return false;
+//                        }
+//                    }
+//                }
             }
         }
         if (color == Color.BLACK) {
             for (Piece piece : board.blackPieces) {
-                for (int number = 1; number <= 8; number++) {
-                    for (constants.Letter letter : constants.Letter.values()) {
-//                        square = new Square(number, letter);
-                        square = board.board[number - 1][letter.ordinal()];
-                        if (isValid(piece.getSquare(), square, color)) {
-                            return false;
-                        }
-                    }
+                availableMoves = getAllValid(piece.getSquare());
+                if (!availableMoves.isEmpty()) {
+                    return false;
                 }
+//                for (int number = 1; number <= 8; number++) {
+//                    for (constants.Letter letter : constants.Letter.values()) {
+////                        square = new Square(number, letter);
+//                        square = board.board[number - 1][letter.ordinal()];
+//                        if (isValid(piece.getSquare(), square, color)) {
+//                            return false;
+//                        }
+//                    }
+//                }
             }
         }
         isEnded = true;
@@ -174,8 +182,8 @@ public class chessGame {
 
         Piece piece = start.getPiece();
         if (isValid(start, target, hasTurn)) {
-            if (start.getPiece().getColor() != hasTurn) {
-                //System.out.println("Not turn");
+            if (start.getPiece().getColor() != hasTurn){
+                System.out.println("Not turn");
                 return;
             }
             
@@ -252,7 +260,7 @@ public class chessGame {
         } else {
             System.out.println("Invalid move");
         }
-//        board.print();
+        board.print();
     }
 
     private boolean isInsufficientMaterial() throws ChessGameException {
