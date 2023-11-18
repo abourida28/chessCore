@@ -93,7 +93,7 @@ public class ChessBoard {
         }
     }
 
-    protected void move(Square start, Square finish) {
+    protected void move(Square start, Square finish) throws ChessGameException {
         start = board[start.getRow() - 1][start.getColumn().ordinal()];
         finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
         if (start.getPiece().getColor() == constants.Color.WHITE) {
@@ -115,7 +115,7 @@ public class ChessBoard {
         piece.move(finish);
     }
 
-    protected void delete(Piece piece)
+    protected void delete(Piece piece) throws ChessGameException
     {
         if (piece != null)
         {
@@ -135,7 +135,7 @@ public class ChessBoard {
         }
     }
     
-    protected void testMove(Square start, Square finish)
+    protected void testMove(Square start, Square finish) throws ChessGameException
     {
         start = board[start.getRow() - 1][start.getColumn().ordinal()];
         finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
@@ -148,7 +148,7 @@ public class ChessBoard {
         piece.setColumn(finish.getColumn());
     }
     
-    protected Square findKing(Color color) {
+    protected Square findKing(Color color) throws ChessGameException{
         if (color == Color.WHITE) {
             for (Piece piece : whitePieces) {
                 if (piece instanceof King) {
@@ -165,7 +165,7 @@ public class ChessBoard {
         return null;
     }
 
-    public boolean isDangerous(Square square, Color color) {
+    public boolean isDangerous(Square square, Color color) throws ChessGameException{
         square = board[square.getRow() - 1][square.getColumn().ordinal()];
         if (color == Color.WHITE) {
             for (Piece piece : blackPieces) {

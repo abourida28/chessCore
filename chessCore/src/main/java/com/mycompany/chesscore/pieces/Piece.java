@@ -4,6 +4,7 @@
  */
 package com.mycompany.chesscore.pieces;
 import com.mycompany.chesscore.ChessBoard;
+import com.mycompany.chesscore.ChessGameException;
 import com.mycompany.chesscore.Square;
 import com.mycompany.chesscore.constants.Letter;
 import com.mycompany.chesscore.constants.Color;
@@ -42,7 +43,7 @@ public abstract class Piece {
         this.board = board;
     }
     
-    public boolean isValidMove(Square target)
+    public boolean isValidMove(Square target) throws ChessGameException
     {
         if (target.getPiece() != null) {
             if (target.getPiece().getColor() == getColor()) {
@@ -52,7 +53,7 @@ public abstract class Piece {
         return true;
     }
     
-    public void move(Square target)
+    public void move(Square target) throws ChessGameException
     {
         this.column = target.getColumn();
         this.row = target.getRow();

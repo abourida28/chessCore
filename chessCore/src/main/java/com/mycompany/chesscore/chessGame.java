@@ -30,7 +30,7 @@ public class chessGame {
         isEnded = false;
     }
 
-    public boolean isValid(Square start, Square target, Color color) {
+    public boolean isValid(Square start, Square target, Color color) throws ChessGameException {
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
         if (start.getPiece() == null) {
@@ -74,7 +74,7 @@ public class chessGame {
         return !putsKingInCheck;
     }
 
-    public ArrayList<Square> getAllValid(Square start) {
+    public ArrayList<Square> getAllValid(Square start) throws ChessGameException {
 
         ArrayList<Square> availableMoves = new ArrayList<Square>();
         Square square;
@@ -90,7 +90,7 @@ public class chessGame {
         return availableMoves;
     }
 
-    private boolean isCheck(Color color) {
+    private boolean isCheck(Color color) throws ChessGameException {
         Square kingSquare;
         if (color == Color.WHITE) {
             kingSquare = board.findKing(color);
@@ -100,7 +100,7 @@ public class chessGame {
         return board.isDangerous(kingSquare, color);
     }
 
-    private boolean isCheckMate(Color color) {
+    private boolean isCheckMate(Color color) throws ChessGameException {
         if (!isCheck(color)) {
             return false;
         }
@@ -126,7 +126,7 @@ public class chessGame {
         return true;
     }
 
-    private boolean isStaleMate(Color color) {
+    private boolean isStaleMate(Color color) throws ChessGameException {
         ArrayList<Square> availableMoves;
         Square square;
         if (color == Color.WHITE) {
@@ -160,7 +160,7 @@ public class chessGame {
         return true;
     }
 
-    public void move(String startStr, String targetStr,String promoteStr) {
+    public void move(String startStr, String targetStr,String promoteStr) throws ChessGameException{
         Square start = Square.parseSquare(startStr);
         Square target = Square.parseSquare(targetStr);
 
@@ -175,9 +175,10 @@ public class chessGame {
         Piece piece = start.getPiece();
         if (isValid(start, target, hasTurn)) {
             if (start.getPiece().getColor() != hasTurn) {
-                System.out.println("Not turn");
+                //System.out.println("Not turn");
                 return;
             }
+            
             // Check for castling need to be implmented in king with all its conditons
             if (piece instanceof King && Math.abs(start.getColumn().ordinal() - target.getColumn().ordinal()) == 2) {
                 System.out.println("Castle");
@@ -210,6 +211,7 @@ public class chessGame {
             }
 
             // Move the piece on the board
+            
             board.move(start, target);
             
             
@@ -253,7 +255,7 @@ public class chessGame {
 //        board.print();
     }
 
-    private boolean isInsufficientMaterial() {
+    private boolean isInsufficientMaterial() throws ChessGameException {
 
         if (!board.blackPawns.isEmpty() || !board.whitePawns.isEmpty()) {
             return false;
