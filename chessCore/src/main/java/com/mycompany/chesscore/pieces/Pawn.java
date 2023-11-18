@@ -1,6 +1,7 @@
 package com.mycompany.chesscore.pieces;
 
 import com.mycompany.chesscore.ChessBoard;
+import com.mycompany.chesscore.ChessGameException;
 import com.mycompany.chesscore.Square;
 import com.mycompany.chesscore.constants.Color;
 import com.mycompany.chesscore.constants.Letter;
@@ -44,7 +45,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Square target) {
+    public boolean isValidMove(Square target) throws ChessGameException {
         super.isValidMove(target);
         int targetRow = target.getRow();
         int targetColumn = target.getColumn().ordinal();

@@ -135,7 +135,7 @@ public class chessGame {
                 if (!availableMoves.isEmpty()) {
                     return false;
                 }
-            
+
 //                for (int number = 1; number <= 8; number++) {
 //                    for (constants.Letter letter : constants.Letter.values()) {
 ////                        square = new Square(number, letter);
@@ -168,7 +168,45 @@ public class chessGame {
         return true;
     }
 
-    public void move(String startStr, String targetStr,String promoteStr) throws ChessGameException{
+    private static void validateMoveCoordinates(String square) throws ChessGameException {
+        if (square.length() != 2) {
+            throw new ChessGameException("Invalid move format: " + square);
+        }
+
+        char letterChar = square.charAt(0);
+        int numberInt;
+
+        try {
+            numberInt = Character.getNumericValue(square.charAt(1));
+        } catch (NumberFormatException e) {
+            throw new ChessGameException("Invalid move format: " + square);
+        }
+
+        if (!(letterChar >= 'a' && letterChar <= 'h' && numberInt >= 1 && numberInt <= 8)) {
+            throw new ChessGameException("Invalid move coordinates: " + square);
+        }
+    }
+
+    private static void validatePromoteStr(String promoteStr) throws ChessGameException {
+        if (promoteStr.equals(""))
+            return;
+        if (promoteStr.length() != 1) {
+            throw new ChessGameException("Invalid promotion string: " + promoteStr);
+        }
+        char[] availablePromotions = new char[]{'R', 'N', 'B', 'Q'};
+        for (char available : availablePromotions) {
+            if (promoteStr.charAt(0) == available) {
+                return;
+            }
+        }
+        throw new ChessGameException("Invalid promotion string: " + promoteStr);
+    }
+
+    public void move(String startStr, String targetStr, String promoteStr) throws ChessGameException {
+        validateMoveCoordinates(startStr);
+        validateMoveCoordinates(targetStr);
+        validatePromoteStr(promoteStr);
+
         Square start = Square.parseSquare(startStr);
         Square target = Square.parseSquare(targetStr);
 
@@ -182,25 +220,25 @@ public class chessGame {
 
         Piece piece = start.getPiece();
         if (isValid(start, target, hasTurn)) {
-            if (start.getPiece().getColor() != hasTurn){
-                System.out.println("Not turn");
+            if (start.getPiece().getColor() != hasTurn) {
+                System.out.println("Invalid move");
                 return;
             }
-            
+
             // Check for castling need to be implmented in king with all its conditons
             if (piece instanceof King && Math.abs(start.getColumn().ordinal() - target.getColumn().ordinal()) == 2) {
                 System.out.println("Castle");
                 Rook rook = null;
                 Square newRookPlace = null;
-            if (target.getColumn() == constants.Letter.G) {
-                rook = (Rook) board.board[start.getRow() - 1][constants.Letter.H.ordinal()].getPiece();
-                newRookPlace = new Square(start.getRow(), constants.Letter.F);
-            } 
-            if (target.getColumn() == constants.Letter.C) {
-                rook = (Rook) board.board[start.getRow() - 1][constants.Letter.A.ordinal()].getPiece();
-                newRookPlace = new Square(start.getRow(), constants.Letter.D);
-            }
-            board.move(rook.getSquare(), newRookPlace);
+                if (target.getColumn() == constants.Letter.G) {
+                    rook = (Rook) board.board[start.getRow() - 1][constants.Letter.H.ordinal()].getPiece();
+                    newRookPlace = new Square(start.getRow(), constants.Letter.F);
+                }
+                if (target.getColumn() == constants.Letter.C) {
+                    rook = (Rook) board.board[start.getRow() - 1][constants.Letter.A.ordinal()].getPiece();
+                    newRookPlace = new Square(start.getRow(), constants.Letter.D);
+                }
+                board.move(rook.getSquare(), newRookPlace);
             } // Check for en-passant
             else if (piece instanceof Pawn && piece.isValidMove(target) && ((Pawn) piece).isEnPassant()) {
                 System.out.println("Enpassant");
@@ -219,25 +257,23 @@ public class chessGame {
             }
 
             // Move the piece on the board
-            
             board.move(start, target);
-            
-            
-           if(!promoteStr.equals("") && target.getPiece() instanceof Pawn && ((Pawn) target.getPiece()).isPromotable()){
-             if("K".equals(promoteStr)){
-                 Knight knight = new Knight(hasTurn,target.getRow(),target.getColumn(),board);
-                 target.setPiece(knight);
-             }else if("B".equals(promoteStr)){
-                 Bishop bishop = new Bishop(hasTurn,target.getRow(),target.getColumn(),board);
-                 target.setPiece(bishop);
-             }else if("Q".equals(promoteStr)){
-                 Queen queen = new Queen(hasTurn,target.getRow(),target.getColumn(),board);
-                 target.setPiece(queen);
-             }else if("R".equals(promoteStr)){
-                 Rook rook = new Rook(hasTurn,target.getRow(),target.getColumn(),board);
-                 target.setPiece(rook); 
-             }
-    }
+
+            if (!promoteStr.equals("") && target.getPiece() instanceof Pawn && ((Pawn) target.getPiece()).isPromotable()) {
+                if ("K".equals(promoteStr)) {
+                    Knight knight = new Knight(hasTurn, target.getRow(), target.getColumn(), board);
+                    target.setPiece(knight);
+                } else if ("B".equals(promoteStr)) {
+                    Bishop bishop = new Bishop(hasTurn, target.getRow(), target.getColumn(), board);
+                    target.setPiece(bishop);
+                } else if ("Q".equals(promoteStr)) {
+                    Queen queen = new Queen(hasTurn, target.getRow(), target.getColumn(), board);
+                    target.setPiece(queen);
+                } else if ("R".equals(promoteStr)) {
+                    Rook rook = new Rook(hasTurn, target.getRow(), target.getColumn(), board);
+                    target.setPiece(rook);
+                }
+            }
 
             // Check for checkmate or stalemate
             if (isCheckMate(hasTurn.getOpponentColor())) {

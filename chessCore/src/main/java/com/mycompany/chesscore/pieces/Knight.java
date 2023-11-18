@@ -5,6 +5,7 @@
 package com.mycompany.chesscore.pieces;
 
 import com.mycompany.chesscore.ChessBoard;
+import com.mycompany.chesscore.ChessGameException;
 import com.mycompany.chesscore.Square;
 import com.mycompany.chesscore.constants;
 
@@ -19,7 +20,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Square target) {
+    public boolean isValidMove(Square target) throws ChessGameException {
         if (!super.isValidMove(target))
             return false;
         

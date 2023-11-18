@@ -5,6 +5,7 @@
 package com.mycompany.chesscore.pieces;
 
 import com.mycompany.chesscore.ChessBoard;
+import com.mycompany.chesscore.ChessGameException;
 import com.mycompany.chesscore.Square;
 import com.mycompany.chesscore.constants;
 import com.mycompany.chesscore.constants.Letter;
@@ -32,7 +33,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Square target) {
+    public boolean isValidMove(Square target)  throws ChessGameException{
         //First check that target is empty or enemy
         if (!super.isValidMove(target)) {
             return false;
