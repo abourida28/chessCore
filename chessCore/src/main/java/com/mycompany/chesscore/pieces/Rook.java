@@ -71,7 +71,7 @@ public class Rook extends Piece {
             if (targetH.ordinal() > super.column.ordinal()) {
                 for (Letter letter : Letter.values()) {
                     if (letter.ordinal() > super.column.ordinal() && letter.ordinal() < targetH.ordinal()) {
-                        s = board[targetV][letter.ordinal()];
+                        s = board[targetV - 1][letter.ordinal()];
                         if (s.getPiece() != null) {
                             return false;
                         }
@@ -81,7 +81,7 @@ public class Rook extends Piece {
             if (targetH.ordinal() < super.column.ordinal()) {
                 for (Letter letter : Letter.values()) {
                     if (letter.ordinal() > targetH.ordinal() && letter.ordinal() < super.column.ordinal()) {
-                        s = board[targetV][letter.ordinal()];
+                        s = board[targetV - 1][letter.ordinal()];
                         if (s.getPiece() != null) {
                             return false;
                         }

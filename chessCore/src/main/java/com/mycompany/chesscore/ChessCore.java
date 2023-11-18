@@ -36,7 +36,7 @@ public class ChessCore {
                 }
                  else if(moveTokens.length == 3){
                     try{
-                        game.move(moveTokens[0].trim(), moveTokens[1].trim(),moveTokens[3].trim());
+                        game.move(moveTokens[0].trim(), moveTokens[1].trim(),moveTokens[2].trim());
                     } catch (ChessGameException ex) {
                         // handle the exception
                         System.out.println("Caught an exception: " + ex.getMessage());
