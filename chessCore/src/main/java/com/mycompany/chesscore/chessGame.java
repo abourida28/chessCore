@@ -29,6 +29,10 @@ public class chessGame {
         hasTurn = Color.WHITE;
         isEnded = false;
     }
+    
+    public Piece getPiece(Square square){
+        return board.board[square.getRow()][square.getColumn().ordinal()].getPiece();
+    }
 
     public boolean isValid(Square start, Square target, Color color) throws ChessGameException {
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
@@ -296,7 +300,7 @@ public class chessGame {
         } else {
             System.out.println("Invalid move");
         }
-        board.print();
+//        board.print();
     }
 
     private boolean isInsufficientMaterial() throws ChessGameException {
