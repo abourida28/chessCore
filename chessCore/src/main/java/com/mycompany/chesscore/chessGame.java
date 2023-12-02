@@ -30,6 +30,11 @@ public class chessGame {
         isEnded = false;
     }
     
+    public Square getSquare(int row, constants.Letter col)
+    {
+        return board.board[row][col.ordinal()];
+    }
+    
     public Piece getPiece(Square square){
         return board.board[square.getRow()][square.getColumn().ordinal()].getPiece();
     }
@@ -206,27 +211,27 @@ public class chessGame {
         throw new ChessGameException("Invalid promotion string: " + promoteStr);
     }
 
-    public void move(String startStr, String targetStr, String promoteStr) throws ChessGameException {
-        validateMoveCoordinates(startStr);
-        validateMoveCoordinates(targetStr);
+    public boolean move(Square start, Square target, String promoteStr) throws ChessGameException {
+//        validateMoveCoordinates(startStr);
+//        validateMoveCoordinates(targetStr);
         validatePromoteStr(promoteStr);
 
-        Square start = Square.parseSquare(startStr);
-        Square target = Square.parseSquare(targetStr);
+//        Square start = Square.parseSquare(startStr);
+//        Square target = Square.parseSquare(targetStr);
 
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
 
         if (isEnded) {
             System.out.println("Game already ended");
-            return;
+            return false;
         }
 
         Piece piece = start.getPiece();
         if (isValid(start, target, hasTurn)) {
             if (start.getPiece().getColor() != hasTurn) {
                 System.out.println("Invalid move");
-                return;
+                return false;
             }
 
             // Check for castling need to be implmented in king with all its conditons
@@ -296,9 +301,10 @@ public class chessGame {
 
             // Switch turn
             hasTurn = hasTurn.getOpponentColor();
-
+            return true;
         } else {
             System.out.println("Invalid move");
+            return false;
         }
 //        board.print();
     }

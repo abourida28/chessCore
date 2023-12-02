@@ -8,38 +8,47 @@ package com.mycompany.chessgui;
  *
  * @author Mashaal
  */
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.mycompany.chesscore.*;
 import com.mycompany.chesscore.constants.Letter;
+import com.mycompany.chesscore.pieces.Bishop;
+import com.mycompany.chesscore.pieces.King;
+import com.mycompany.chesscore.pieces.Knight;
+import com.mycompany.chesscore.pieces.Pawn;
+import com.mycompany.chesscore.pieces.Piece;
+import com.mycompany.chesscore.pieces.Queen;
+import com.mycompany.chesscore.pieces.Rook;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MainGuiChess extends JFrame {
+
     private SquareGUI[][] boardSquares;
     private boolean isWhiteTurn = true;
+    chessGame game;
+    JPanel boardPanel;
 
     private static final String[] pieceImagePaths = {
-            "BlackBishop.png",
-            "BlackKing.png",
-            "BlackKnight.png",
-            "BlackPawn.png",
-            "BlackQueen.png",
-            "BlackRook.png",
-            "WhiteBishop.png",
-            "WhiteKing.png",
-            "WhiteKnight.png",
-            "WhitePawn.png",
-            "WhiteQueen.png",
-            "WhiteRook.png"
+        "resources/WhitePawn.png",
+        "resources/BlackPawn.png",
+        "resources/WhiteRook.png",
+        "resources/BlackRook.png",
+        "resources/WhiteKnight.png",
+        "resources/BlackKnight.png",
+        "resources/WhiteBishop.png",
+        "resources/BlackBishop.png",
+        "resources/WhiteQueen.png",
+        "resources/BlackQueen.png",
+        "resources/WhiteKing.png",
+        "resources/BlackKing.png"
     };
 
     public MainGuiChess() {
         initializeBoard();
-        //setPieceIcons();
+        updateIcons();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
@@ -48,48 +57,84 @@ public class MainGuiChess extends JFrame {
     }
 
     private void initializeBoard() {
+        game = new chessGame();
         boardSquares = new SquareGUI[8][8];
-        JPanel boardPanel = new JPanel(new GridLayout(8, 8));
+        boardPanel = new JPanel(new GridLayout(8, 8));
         Color color;
-        for (int row = 0; row < 8; row++) {
+        for (int row = 7; row >= 0; row--) {
             for (int col = 0; col < 8; col++) {
-               if ((row + col) % 2 == 0) {
+                if ((row + col) % 2 == 1) {
                     color = Color.WHITE;
                 } else {
                     color = new Color(139, 69, 19);
                 }
-                SquareGUI square = new SquareGUI(new Square(row,Letter.values()[col]),color);
+                SquareGUI square = new SquareGUI(game.getSquare(row, Letter.values()[col]), color);
                 square.setPreferredSize(new Dimension(80, 80));
                 square.addMouseListener(new ChessButtonListener(row, col));
                 boardSquares[row][col] = square;
-                
+
                 boardPanel.add(square);
             }
         }
 
         add(boardPanel);
     }
-    
-private void setPieceIcons() {
-    for(int row=0;row<8;row++){
-       for (int col = 0; col < 8; col++) {
-           
-       }
+
+    private void updateIcons() {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = boardSquares[row][col].getSquare().getPiece();
+                if (piece instanceof Pawn) {
+                    if (piece.getColor() == constants.Color.WHITE) {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[0]);
+                    } else {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[1]);
+                    }
+                } else if (piece instanceof Rook) {
+                    if (piece.getColor() == constants.Color.WHITE) {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[2]);
+                    } else {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[3]);
+                    }
+                } else if (piece instanceof Knight) {
+                    if (piece.getColor() == constants.Color.WHITE) {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[4]);
+                    } else {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[5]);
+                    }
+                } else if (piece instanceof Bishop) {
+                    if (piece.getColor() == constants.Color.WHITE) {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[6]);
+                    } else {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[7]);
+                    }
+                } else if (piece instanceof Queen) {
+                    if (piece.getColor() == constants.Color.WHITE) {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[8]);
+                    } else {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[9]);
+                    }
+                } else if (piece instanceof King) {
+                    if (piece.getColor() == constants.Color.WHITE) {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[10]);
+                    } else {
+                        boardSquares[row][col].setPieceIcon(pieceImagePaths[11]);
+                    }
+                }
+                else
+                    boardSquares[row][col].setPieceIcon(null);
+            }
+        }
+
     }
 
-}
-
-
-    private void setPieceIcon(Square square, String imagePath) {
-        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(imagePath));
-        //boardButtons[square.getRow()][square.getColumn().ordinal()].setIcon(icon);
-    }
-    
     private class ChessButtonListener implements MouseListener {
-            //access board buttons with row and col and save a variable to see if it is first or second move
+        //access board buttons with row and col and save a variable to see if it is first or second move
+
         private final int row;
         private final int col;
         private int clicks = 0;
+        private static Square firstClick = null;
 
         public ChessButtonListener(int row, int col) {
             this.row = row;
@@ -97,17 +142,20 @@ private void setPieceIcons() {
         }
 
         @Override
-        public void mouseClicked(MouseEvent action) {    
-            JButton clickedButton = (JButton) action.getSource();
-            if(clickedButton.getIcon() != null){
-                System.out.println("I have an icon");
+        public void mouseClicked(MouseEvent action) {
+            SquareGUI clickedSquare = (SquareGUI) action.getSource();
+            if (firstClick == null) {
+                if (clickedSquare.getSquare().getPiece() != null) {
+                    firstClick = clickedSquare.getSquare();
+                }
+            } else {
+                boolean moved = game.move(firstClick, clickedSquare.getSquare(), "");
+                if (moved) {
+                    isWhiteTurn = !isWhiteTurn;
+                    updateBoard();
+                }
+                firstClick=null;
             }
-            System.out.println("clickaya rakam " + clicks++);
-//            highlightValidMoves(row, col);
-//            highlightKingInCheck(row, col);
-//            isWhiteTurn = !isWhiteTurn;
-//            updateBoard();
-            //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
 
         @Override
@@ -140,11 +188,31 @@ private void setPieceIcons() {
     }
 
     private void updateBoard() {
-        //update the board based on the current state like flipping board and 
+        Component[] components = boardPanel.getComponents();
+        for (Component component : components) {
+            boardPanel.remove(component);
+        }
+        if (isWhiteTurn) {
+            for (int row = 7; row >= 0; row--) {
+                for (int col = 0; col < 8; col++) {
+                    boardPanel.add(boardSquares[row][col]);
+                }
+            }
+        }
+        else {
+            for (int row = 0; row < 8; row++) {
+                for (int col = 7; col >= 0; col--) {
+                    boardPanel.add(boardSquares[row][col]);
+                }
+            }
+        }
+        updateIcons();
+        
+        boardPanel.revalidate();
+        boardPanel.repaint();
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainGuiChess());
     }
 }
-
