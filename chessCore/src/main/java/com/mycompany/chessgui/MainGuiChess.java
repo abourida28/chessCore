@@ -168,8 +168,6 @@ public class MainGuiChess extends JFrame {
     }
     
     private class ChessButtonListener implements MouseListener {
-        //access board buttons with row and col and save a variable to see if it is first or second move
-
         private final int row;
         private final int col;
         private static Square firstClick = null;
@@ -198,52 +196,33 @@ public class MainGuiChess extends JFrame {
                     
                     System.out.println("promotion made");
                     try{
-        // Parent component can be null or a reference to a Swing component
-        Component parentComponent = null;
 
-        // Message to be displayed in the dialog
-        String message = "Choose a chess piece:";
-
-        // Dialog title
+                        
+        String message = "Choose a chess piece to promote:";
         String title = "Piece Selection";
-
-        // Dialog type (plain message)
-        int messageType = JOptionPane.PLAIN_MESSAGE;
-
-        // Custom buttons
         Object[] options = {"Rook", "Bishop", "Queen", "Knight"};
-
-        // Default selected option (optional)
         Object defaultOption = options[0];
-
-        // Show the option dialog
         int result = JOptionPane.showOptionDialog(
-                parentComponent,
+                null,
                 message,
                 title,
                 JOptionPane.YES_NO_CANCEL_OPTION,
-                messageType,
-                null,          // Icon (null for no custom icon)
+                JOptionPane.PLAIN_MESSAGE,
+                null,
                 options,
-                defaultOption  // Default selected option (optional)
+                defaultOption
         );
-
-        // Process the result
         switch (result) {
             case 0:
-                // Rook button clicked
                 promoteTo = "R";
                 break;
             case 1:
-                // Bishop button clicked
                 promoteTo = "B";
                 break;
             case 2:
-                // Queen button clicked
                 promoteTo = "Q";
                 break;
             case 3:
-                // Knight button clicked
                 promoteTo = "K";
                 break;
             default:
@@ -251,10 +230,7 @@ public class MainGuiChess extends JFrame {
                 break;
             
         }
-           }catch(Exception e){
-                 
-           }
-               
+          }catch(Exception e){}
                 }
                 boolean moved = game.move(firstClick, clickedSquare.getSquare(), promoteTo);
                 promoteTo = "";

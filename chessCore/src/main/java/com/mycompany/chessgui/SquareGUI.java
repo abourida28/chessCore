@@ -32,8 +32,6 @@ public class SquareGUI extends JButton {
     private void style()
     {
         setBorderPainted(false);
-//        setFocusPainted(false);
-//        setFocusable(false);
     }
     
     

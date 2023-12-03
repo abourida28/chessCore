@@ -223,7 +223,7 @@ public class chessGame {
         if (promoteStr.length() != 1) {
             throw new ChessGameException("Invalid promotion string: " + promoteStr);
         }
-        char[] availablePromotions = new char[]{'R', 'N', 'B', 'Q'};
+        char[] availablePromotions = new char[]{'R', 'K', 'B', 'Q'};
         for (char available : availablePromotions) {
             if (promoteStr.charAt(0) == available) {
                 return;
