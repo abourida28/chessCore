@@ -28,4 +28,14 @@ public class constants {
         G,
         H
     }
+    
+    public enum GAME_STATUS{
+        BLACK_IN_CHECK,
+        WHITE_IN_CHECK,
+        DRAW,
+        BLACK_WON,
+        WHITE_WON,
+        GAME_IN_PROGRESS,
+        GAME_ENDED
+    }
 }
