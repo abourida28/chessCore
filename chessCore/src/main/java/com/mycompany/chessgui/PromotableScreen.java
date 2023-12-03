@@ -16,7 +16,7 @@ import javax.swing.*;
  *
  * @author Mashaal
  */
-public class PromotableScreen extends JFrame{
+public class PromotableScreen extends JDialog{
       public PromotableScreen() {
         setTitle("Chess Promotion");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

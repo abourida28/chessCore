@@ -30,7 +30,7 @@ public class MainGuiChess extends JFrame {
 
     private SquareGUI[][] boardSquares;
     private static boolean isWhiteTurn = true;
-    public static String promoteTo = null;
+    public static String promoteTo = "";
     chessGame game;
     JPanel boardPanel;
     java.util.ArrayList<SquareGUI> highlited = new ArrayList<SquareGUI>();
@@ -193,18 +193,69 @@ public class MainGuiChess extends JFrame {
                 }
             } else {
                 if(firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare())){
+                    
                     System.out.println("promotion made");
-                   SwingUtilities.invokeLater(() -> {
-                PromotableScreen promotionWindow = new PromotableScreen();
-                promotionWindow.setVisible(true);
-                
-            });
-//                   while(promoteTo == null){
-//                       
-//                   }
+                    try{
+        // Parent component can be null or a reference to a Swing component
+        Component parentComponent = null;
+
+        // Message to be displayed in the dialog
+        String message = "Choose a chess piece:";
+
+        // Dialog title
+        String title = "Piece Selection";
+
+        // Dialog type (plain message)
+        int messageType = JOptionPane.PLAIN_MESSAGE;
+
+        // Custom buttons
+        Object[] options = {"Rook", "Bishop", "Queen", "Knight"};
+
+        // Default selected option (optional)
+        Object defaultOption = options[0];
+
+        // Show the option dialog
+        int result = JOptionPane.showOptionDialog(
+                parentComponent,
+                message,
+                title,
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                messageType,
+                null,          // Icon (null for no custom icon)
+                options,
+                defaultOption  // Default selected option (optional)
+        );
+
+        // Process the result
+        switch (result) {
+            case 0:
+                // Rook button clicked
+                promoteTo = "R";
+                break;
+            case 1:
+                // Bishop button clicked
+                promoteTo = "B";
+                break;
+            case 2:
+                // Queen button clicked
+                promoteTo = "Q";
+                break;
+            case 3:
+                // Knight button clicked
+                promoteTo = "K";
+                break;
+            default:
+                promoteTo = "Q";
+                break;
+            
+        }
+           }catch(Exception e){
+                 
+           }
+               
                 }
-                boolean moved = game.move(firstClick, clickedSquare.getSquare(), "");
-                promoteTo = null;
+                boolean moved = game.move(firstClick, clickedSquare.getSquare(), promoteTo);
+                promoteTo = "";
                 if (moved) {
                     isWhiteTurn = !isWhiteTurn;
                     updateBoard();

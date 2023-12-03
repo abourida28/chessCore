@@ -32,7 +32,7 @@ public class Pawn extends Piece {
     }
 
     public boolean isPromotable() {
-        return (getColor() == Color.WHITE && row == 7) || (getColor() == Color.BLACK && row == 2);
+        return (getColor() == Color.WHITE && row == 8) || (getColor() == Color.BLACK && row == 1);
     }
     public boolean isPromotable(Square target) {
         return (getColor() == Color.WHITE && row == 7 && target.getRow() == 8) || (getColor() == Color.BLACK && row == 2 && target.getRow() == 1);
