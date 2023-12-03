@@ -29,12 +29,13 @@ import java.util.ArrayList;
 public class MainGuiChess extends JFrame {
 
     private SquareGUI[][] boardSquares;
-    private boolean isWhiteTurn = true;
+    private static boolean isWhiteTurn = true;
+    public static String promoteTo = null;
     chessGame game;
     JPanel boardPanel;
     java.util.ArrayList<SquareGUI> highlited = new ArrayList<SquareGUI>();
 
-    private static final String[] pieceImagePaths = {
+    public static final String[] pieceImagePaths = {
         "resources/WhitePawn.png",
         "resources/BlackPawn.png",
         "resources/WhiteRook.png",
@@ -48,6 +49,10 @@ public class MainGuiChess extends JFrame {
         "resources/WhiteKing.png",
         "resources/BlackKing.png"
     };
+    
+    public static boolean getIsWhiteTurn(){
+        return isWhiteTurn;
+    }
 
     public MainGuiChess() {
         initializeBoard();
@@ -72,7 +77,7 @@ public class MainGuiChess extends JFrame {
                 } else {
                     color = new Color(139, 69, 19);
                 }
-                SquareGUI square = new SquareGUI(game.getSquare(row, Letter.values()[col]), color);
+                SquareGUI square = new SquareGUI(game.getSquare(row+1, Letter.values()[col]), color);
                 square.setPreferredSize(new Dimension(80, 80));
                 square.addMouseListener(new ChessButtonListener(row, col));
                 boardSquares[row][col] = square;
@@ -174,20 +179,32 @@ public class MainGuiChess extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent action) {
+             while (!highlited.isEmpty()) {
+                    highlited.get(0).removeHighlight();
+                    highlited.remove(0);
+                }
             SquareGUI clickedSquare = (SquareGUI) action.getSource();
-            if (firstClick == null) {
+            if (firstClick == null || (clickedSquare.getSquare().getPiece() != null && clickedSquare.getSquare().getPiece().getColor() == game.getHasTurn())) {
                 if (clickedSquare.getSquare().getPiece() != null) {
                     if (clickedSquare.getSquare().getPiece().getColor() == game.getHasTurn()) {
-                        firstClick = clickedSquare.getSquare();
+                        firstClick = game.getSquare(clickedSquare.getSquare().getRow(), clickedSquare.getSquare().getColumn());
                         highlightValidMoves(clickedSquare);
                     }
                 }
             } else {
-                while (!highlited.isEmpty()) {
-                    highlited.get(0).removeHighlight();
-                    highlited.remove(0);
+                if(firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare())){
+                    System.out.println("promotion made");
+                   SwingUtilities.invokeLater(() -> {
+                PromotableScreen promotionWindow = new PromotableScreen();
+                promotionWindow.setVisible(true);
+                
+            });
+//                   while(promoteTo == null){
+//                       
+//                   }
                 }
                 boolean moved = game.move(firstClick, clickedSquare.getSquare(), "");
+                promoteTo = null;
                 if (moved) {
                     isWhiteTurn = !isWhiteTurn;
                     updateBoard();

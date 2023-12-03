@@ -47,7 +47,7 @@ public class chessGame {
     
     public Square getSquare(int row, constants.Letter col)
     {
-        return board.board[row][col.ordinal()];
+        return board.board[row-1][col.ordinal()];
     }
     
     public Piece getPiece(Square square){
