@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.mycompany.chesscore.*;
 import com.mycompany.chesscore.constants.Letter;
+import com.mycompany.chesscore.constants.GAME_STATUS;
 import com.mycompany.chesscore.pieces.Bishop;
 import com.mycompany.chesscore.pieces.King;
 import com.mycompany.chesscore.pieces.Knight;
@@ -23,6 +24,7 @@ import com.mycompany.chesscore.pieces.Queen;
 import com.mycompany.chesscore.pieces.Rook;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class MainGuiChess extends JFrame {
 
@@ -30,6 +32,7 @@ public class MainGuiChess extends JFrame {
     private boolean isWhiteTurn = true;
     chessGame game;
     JPanel boardPanel;
+    java.util.ArrayList<SquareGUI> highlited = new ArrayList<SquareGUI>();
 
     private static final String[] pieceImagePaths = {
         "resources/WhitePawn.png",
@@ -121,13 +124,42 @@ public class MainGuiChess extends JFrame {
                     } else {
                         boardSquares[row][col].setPieceIcon(pieceImagePaths[11]);
                     }
-                }
-                else
+                } else {
                     boardSquares[row][col].setPieceIcon(null);
+                }
             }
         }
     }
 
+    private void updateStatus()
+    {
+        GAME_STATUS status = game.getGameStatus();
+        if (status == GAME_STATUS.GAME_IN_PROGRESS)
+            return;
+        if (status == GAME_STATUS.BLACK_IN_CHECK || status == GAME_STATUS.WHITE_IN_CHECK)
+        {
+            highlightKingInCheck();
+        }
+        else if (status == GAME_STATUS.BLACK_WON)
+        {
+            highlightKingInCheck();
+            JOptionPane.showMessageDialog(null, "Game ended, BLACK WON!");
+        }
+        else if (status == GAME_STATUS.WHITE_WON)
+        {
+            highlightKingInCheck();
+            JOptionPane.showMessageDialog(null, "Game ended, WHITE WON!");
+        }
+        else if (status == GAME_STATUS.INSUFFICIENT_MATERIAL)
+        {
+            JOptionPane.showMessageDialog(null, "Game ended as a draw due to insufficient material!");
+        }
+        else if (status == GAME_STATUS.STALEMATE)
+        {
+            JOptionPane.showMessageDialog(null, "Game ended as a draw due STALEMATE!");
+        }
+    }
+    
     private class ChessButtonListener implements MouseListener {
         //access board buttons with row and col and save a variable to see if it is first or second move
 
@@ -140,24 +172,30 @@ public class MainGuiChess extends JFrame {
             this.col = col;
         }
 
-@Override
-public void mouseClicked(MouseEvent action) {
-    SquareGUI clickedSquare = (SquareGUI) action.getSource();
-    if (firstClick == null) {
-        if (clickedSquare.getSquare().getPiece() != null) {
-            firstClick = clickedSquare.getSquare();
-            highlightValidMoves(clickedSquare);
+        @Override
+        public void mouseClicked(MouseEvent action) {
+            SquareGUI clickedSquare = (SquareGUI) action.getSource();
+            if (firstClick == null) {
+                if (clickedSquare.getSquare().getPiece() != null) {
+                    if (clickedSquare.getSquare().getPiece().getColor() == game.getHasTurn()) {
+                        firstClick = clickedSquare.getSquare();
+                        highlightValidMoves(clickedSquare);
+                    }
+                }
+            } else {
+                while (!highlited.isEmpty()) {
+                    highlited.get(0).removeHighlight();
+                    highlited.remove(0);
+                }
+                boolean moved = game.move(firstClick, clickedSquare.getSquare(), "");
+                if (moved) {
+                    isWhiteTurn = !isWhiteTurn;
+                    updateBoard();
+                }
+                firstClick = null;
+                updateStatus();
+            }
         }
-    } else {
-        boolean moved = game.move(firstClick, clickedSquare.getSquare(), "");
-        if (moved) {
-            isWhiteTurn = !isWhiteTurn;
-            updateBoard();
-        }
-        firstClick = null;
-        //updateBoard();
-    }
-}
 
         @Override
         public void mousePressed(MouseEvent e) {
@@ -180,58 +218,21 @@ public void mouseClicked(MouseEvent action) {
         }
     }
     //code needs refactoring because repeated code in here in the two for loops
-private void highlightValidMoves(SquareGUI firstSquare) {
-    Component[] components = boardPanel.getComponents();
-        for (Component component : components) {
-            boardPanel.remove(component);
-        }
-    SquareGUI[][] highlightedSquares = new SquareGUI[8][8];
-    java.util.List<Square> validMoves = game.getAllValid(firstSquare.getSquare());
 
-    for (Square move : validMoves) {
-        int moveRow = move.getRow();
-        int moveCol = move.getColumn().ordinal();
-        SquareGUI highlightedSquare = new SquareGUI(move, Color.RED); //change color here
-        highlightedSquare.setPreferredSize(new Dimension(80, 80));
-        highlightedSquares[moveRow][moveCol] = highlightedSquare;
+    private void highlightValidMoves(SquareGUI firstSquare) {
+        java.util.List<Square> validMoves = game.getAllValid(firstSquare.getSquare());
+
+        for (Square move : validMoves) {
+            highlited.add(boardSquares[move.getRow() - 1][move.getColumn().ordinal()]);
+            boardSquares[move.getRow() - 1][move.getColumn().ordinal()].highlight();
+        }
     }
-    if(highlightedSquares.length != 0){
-        //have issues here because it only highlights one row minus the current row making it one less row on the black side 
-        // and one more row in the white side
-        // Add the highlighted squares to the board panel
-        if (isWhiteTurn) {
-            for (int row = 7; row >= 0; row--) {
-                for (int col = 0; col < 8; col++) {
-                    if (highlightedSquares[row][col] != null) {
-                boardPanel.add(highlightedSquares[row][col]);
-            } else {
-                boardPanel.add(boardSquares[row][col]);
-            }
-                }
-            }
-        }
-        else {
-            for (int row = 0; row < 8; row++) {
-                for (int col = 7; col >= 0; col--) {
-               if (highlightedSquares[row][col] != null) {
-                boardPanel.add(highlightedSquares[row][col]);
-            } else {
-                boardPanel.add(boardSquares[row][col]);
-            }
-                }
-            }
-        }
-        updateIcons();
-        boardPanel.revalidate();
-        boardPanel.repaint();
-    }else{
-        System.out.println("no moves available");
-    }
-}
 
-
-    private void highlightKingInCheck(int row, int col) {
+    private void highlightKingInCheck() {
         //highlight the king square when check
+        Square kingSquare = game.getKingSquare();
+        highlited.add(boardSquares[kingSquare.getRow() - 1][kingSquare.getColumn().ordinal()]);
+        boardSquares[kingSquare.getRow() - 1][kingSquare.getColumn().ordinal()].highlightInCheck();
     }
 
     private void updateBoard() {
@@ -245,8 +246,7 @@ private void highlightValidMoves(SquareGUI firstSquare) {
                     boardPanel.add(boardSquares[row][col]);
                 }
             }
-        }
-        else {
+        } else {
             for (int row = 0; row < 8; row++) {
                 for (int col = 7; col >= 0; col--) {
                     boardPanel.add(boardSquares[row][col]);

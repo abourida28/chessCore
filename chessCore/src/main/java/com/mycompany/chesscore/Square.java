@@ -63,5 +63,17 @@ public class Square {
         return column;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Square))
+            return false;
+        Square sq = (Square)obj;
+        if(sq.getRow() == this.row && sq.getColumn() == this.column)
+            return true;
+        return false;
+    }
+
+    
+    
     
 }

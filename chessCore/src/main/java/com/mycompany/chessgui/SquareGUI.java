@@ -26,8 +26,35 @@ public class SquareGUI extends JButton {
         this.square = square;
         this.color = color;
         this.setBackground(this.color);
+        style();
     }
 
+    private void style()
+    {
+        setBorderPainted(false);
+//        setFocusPainted(false);
+//        setFocusable(false);
+    }
+    
+    
+    public void highlight()
+    {
+        if (this.color == Color.WHITE)
+            this.setBackground(Color.lightGray);
+        else
+            this.setBackground(Color.GRAY);
+    }
+    
+    public void highlightInCheck()
+    {
+        this.setBackground(Color.RED);
+    }
+    
+    public void removeHighlight()
+    {
+        this.setBackground(this.color);
+    }
+    
     public Square getSquare() {
         return this.square;
     }
