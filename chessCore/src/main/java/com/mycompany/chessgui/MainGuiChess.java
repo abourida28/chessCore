@@ -61,8 +61,10 @@ public class MainGuiChess extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setResizable(false);
-        setTitle("Chess GUI");
+        setTitle("Chess");
         setVisible(true);
+        ImageIcon icon = new ImageIcon("resources/BlackKing.png");
+        setIconImage(icon.getImage());
     }
 
     private void initializeBoard() {

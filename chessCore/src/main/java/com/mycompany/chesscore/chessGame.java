@@ -290,19 +290,38 @@ public class chessGame {
             board.move(start, target);
             
             if (!promoteStr.equals("") && target.getPiece() instanceof Pawn && ((Pawn) target.getPiece()).isPromotable()) {
+                Piece pawn = target.getPiece();
+                board.delete(pawn);
                 if ("K".equals(promoteStr)) {
-                    Knight knight = new Knight(hasTurn, target.getRow(), target.getColumn(), board);
-                    target.setPiece(knight);
+                    Knight promotedPiece = new Knight(hasTurn, target.getRow(), target.getColumn(), board);
+                    target.setPiece(promotedPiece);
+                    if (hasTurn == Color.WHITE)
+                        board.whitePieces.add(promotedPiece);
+                    else
+                        board.blackPieces.add(promotedPiece);
                 } else if ("B".equals(promoteStr)) {
-                    Bishop bishop = new Bishop(hasTurn, target.getRow(), target.getColumn(), board);
-                    target.setPiece(bishop);
+                    Bishop promotedPiece = new Bishop(hasTurn, target.getRow(), target.getColumn(), board);
+                    target.setPiece(promotedPiece);
+                    if (hasTurn == Color.WHITE)
+                        board.whitePieces.add(promotedPiece);
+                    else
+                        board.blackPieces.add(promotedPiece);
                 } else if ("Q".equals(promoteStr)) {
-                    Queen queen = new Queen(hasTurn, target.getRow(), target.getColumn(), board);
-                    target.setPiece(queen);
+                    Queen promotedPiece = new Queen(hasTurn, target.getRow(), target.getColumn(), board);
+                    target.setPiece(promotedPiece);
+                    if (hasTurn == Color.WHITE)
+                        board.whitePieces.add(promotedPiece);
+                    else
+                        board.blackPieces.add(promotedPiece);
                 } else if ("R".equals(promoteStr)) {
-                    Rook rook = new Rook(hasTurn, target.getRow(), target.getColumn(), board);
-                    target.setPiece(rook);
+                    Rook promotedPiece = new Rook(hasTurn, target.getRow(), target.getColumn(), board);
+                    target.setPiece(promotedPiece);
+                    if (hasTurn == Color.WHITE)
+                        board.whitePieces.add(promotedPiece);
+                    else
+                        board.blackPieces.add(promotedPiece);
                 }
+                
             }
 
             // Check for checkmate or stalemate
