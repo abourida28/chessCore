@@ -21,21 +21,21 @@ import java.util.ArrayList;
  * @author omara
  */
 public class ChessBoard {
-
+    
     public Square[][] board = new Square[8][8];
     ArrayList<Pawn> whitePawns;
     ArrayList<Pawn> blackPawns;
     ArrayList<Piece> whitePieces;
     ArrayList<Piece> blackPieces;
     private TimeLine timeline;
-
+    
     public ChessBoard() {
         Piece piece;
         whitePawns = new ArrayList<Pawn>();
         blackPawns = new ArrayList<Pawn>();
         whitePieces = new ArrayList<Piece>();
         blackPieces = new ArrayList<Piece>();
-        timeline =  new TimeLine();
+        timeline = new TimeLine();
         for (int number = 1; number <= 8; number++) {
             for (Letter letter : Letter.values()) {
                 board[number - 1][letter.ordinal()] = new Square(number, letter);
@@ -93,8 +93,9 @@ public class ChessBoard {
             }
         }
     }
-
+    
     protected void move(Square start, Square finish) throws ChessGameException {
+        saveSnapshot();
         start = board[start.getRow() - 1][start.getColumn().ordinal()];
         finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
         if (start.getPiece().getColor() == constants.Color.WHITE) {
@@ -114,11 +115,9 @@ public class ChessBoard {
         start.setPiece(null);
         piece.move(finish);
     }
-
-    protected void delete(Piece piece) throws ChessGameException
-    {
-        if (piece != null)
-        {
+    
+    protected void delete(Piece piece) throws ChessGameException {
+        if (piece != null) {
             board[piece.getSquare().getRow() - 1][piece.getSquare().getColumn().ordinal()].setPiece(null);
             if (whitePieces.contains(piece)) {
                 whitePieces.remove(piece);
@@ -135,53 +134,56 @@ public class ChessBoard {
         }
     }
     
-    
     public void saveSnapshot() {
         snapshot snapshot = new snapshot(whitePawns, blackPawns, whitePieces, blackPieces);
         timeline.pushSnapshot(snapshot);
     }
     
-    public TimeLine getTimeLine(){
+    public TimeLine getTimeLine() {
         return timeline;
     }
-
+    
     public void restoreSnapshot() {
-            if (timeline.hasSnapshots()){
-                snapshot snapshot = timeline.popSnapshot();
-                this.whitePawns = snapshot.getWhitePawns();
-                this.blackPawns = snapshot.getBlackPawns();
-                this.whitePieces = snapshot.getWhitePieces();
-                this.blackPieces = snapshot.getBlackPieces();
-                reDrawBoard();
-            }
+        if (timeline.hasSnapshots()) {
+            snapshot snapshot = timeline.popSnapshot();
+            this.whitePawns = snapshot.getWhitePawns();
+            this.blackPawns = snapshot.getBlackPawns();
+            this.whitePieces = snapshot.getWhitePieces();
+            this.blackPieces = snapshot.getBlackPieces();
+            reDrawBoard();
+        }
 //            else{
 //                System.out.println("No more moves to undo.");
 //            }
     }
     
-    public void reDrawBoard(){
-//        for(int i=0;i<8;i++){
-//            this.board[whitePieces.get(i).getSquare().getRow()][whitePieces.get(i).getSquare().getColumn().ordinal()].setPiece(null);
-//            this.board[whitePieces.get(i).getSquare().getRow()][whitePieces.get(i).getSquare().getColumn().ordinal()].setPiece(whitePieces.get(i)); 
-//            this.board[blackPieces.get(i).getSquare().getRow()][blackPieces.get(i).getSquare().getColumn().ordinal()].setPiece(null);
-//            this.board[blackPieces.get(i).getSquare().getRow()][blackPieces.get(i).getSquare().getColumn().ordinal()].setPiece(blackPieces.get(i)); 
-//        }
+    public void reDrawBoard() {//Not finished
+        for (int number = 1; number <= 8; number++) {
+            for (Letter letter : Letter.values()) {
+                board[number - 1][letter.ordinal()].setPiece(null);
+            }            
+        }
+        for (Piece piece : whitePieces) {
+            board[piece.getSquare().getRow()  - 1][piece.getSquare().getColumn().ordinal()].setPiece(piece);
+        }
+        for (Piece piece : blackPieces) {
+            board[piece.getSquare().getRow()  - 1][piece.getSquare().getColumn().ordinal()].setPiece(piece);
+        }
     }
     
-    protected void testMove(Square start, Square finish) throws ChessGameException
-    {
+    protected void testMove(Square start, Square finish) throws ChessGameException {
         start = board[start.getRow() - 1][start.getColumn().ordinal()];
         finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
         
         Piece piece = start.getPiece();
         finish.setPiece(piece);
         start.setPiece(null);
-         
+        
         piece.setRow(finish.getRow());
         piece.setColumn(finish.getColumn());
     }
     
-    protected Square findKing(Color color) throws ChessGameException{
+    protected Square findKing(Color color) throws ChessGameException {
         if (color == Color.WHITE) {
             for (Piece piece : whitePieces) {
                 if (piece instanceof King) {
@@ -197,8 +199,8 @@ public class ChessBoard {
         }
         return null;
     }
-
-    public boolean isDangerous(Square square, Color color) throws ChessGameException{
+    
+    public boolean isDangerous(Square square, Color color) throws ChessGameException {
         square = board[square.getRow() - 1][square.getColumn().ordinal()];
         if (color == Color.WHITE) {
             for (Piece piece : blackPieces) {
@@ -215,31 +217,31 @@ public class ChessBoard {
         }
         return false;
     }
-
+    
     protected void print() {
         System.out.println("");
         System.out.println("");
         for (int number = 8; number >= 1; number--) {
             for (Letter letter : Letter.values()) {
-                if (board[number - 1][letter.ordinal()].getPiece() == null)
-                {
-                    if ((number + letter.ordinal()) % 2 == 1)
+                if (board[number - 1][letter.ordinal()].getPiece() == null) {
+                    if ((number + letter.ordinal()) % 2 == 1) {
                         System.out.print("_");
-                    else
+                    } else {
                         System.out.print("_");
+                    }
+                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Pawn) {
+                    System.out.print("P");
+                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Rook) {
+                    System.out.print("R");
+                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Knight) {
+                    System.out.print("N");
+                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Bishop) {
+                    System.out.print("B");
+                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof King) {
+                    System.out.print("K");
+                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Queen) {
+                    System.out.print("Q");
                 }
-                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Pawn)
-                        System.out.print("P");
-                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Rook)
-                        System.out.print("R");
-                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Knight)
-                        System.out.print("N");
-                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Bishop)
-                        System.out.print("B");
-                else if (board[number - 1][letter.ordinal()].getPiece() instanceof King)
-                        System.out.print("K");
-                else if (board[number - 1][letter.ordinal()].getPiece() instanceof Queen)
-                        System.out.print("Q");
             }
             System.out.println("");
         }

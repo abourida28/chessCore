@@ -4,9 +4,16 @@
  */
 package com.mycompany.chesscore;
 
+import com.mycompany.chesscore.pieces.Bishop;
+import com.mycompany.chesscore.pieces.King;
+import com.mycompany.chesscore.pieces.Knight;
 import com.mycompany.chesscore.pieces.Pawn;
 import com.mycompany.chesscore.pieces.Piece;
+import com.mycompany.chesscore.pieces.Queen;
+import com.mycompany.chesscore.pieces.Rook;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,15 +25,13 @@ public class snapshot {
     private ArrayList<Piece> whitePieces;
     private ArrayList<Piece> blackPieces;
     
-    private deepClone<Pawn> deepClonePawns = new deepClone<Pawn>();
-    private deepClone<Piece> deepClonePieces =  new deepClone<Piece>();
 
     public snapshot(ArrayList<Pawn> whitePawns, ArrayList<Pawn> blackPawns, ArrayList<Piece> whitePieces, ArrayList<Piece> blackPieces) {
-        this.whitePawns = deepClonePawns.deepClone(whitePawns);
-        this.blackPawns = deepClonePawns.deepClone(blackPawns);
+        this.whitePawns = deepClonePawns(whitePawns);
+        this.blackPawns = deepClonePawns(blackPawns);
         
-        this.whitePieces = deepClonePieces.deepClone(whitePieces);
-        this.blackPieces = deepClonePieces.deepClone(blackPieces);
+        this.whitePieces = deepClonePieces(whitePieces);
+        this.blackPieces = deepClonePieces(blackPieces);
     }
     
     public void printState() {
@@ -37,33 +42,95 @@ public class snapshot {
     }
 
     public ArrayList<Pawn> getWhitePawns() {
-        return deepClonePawns.deepClone(whitePawns);
+        ArrayList<Pawn> list = deepClonePawns(whitePawns);
+        return list;
     }
 
     public ArrayList<Pawn> getBlackPawns() {
-        return deepClonePawns.deepClone(blackPawns);
+        ArrayList<Pawn> list = deepClonePawns(blackPawns);
+        return  list;
     }
 
     public ArrayList<Piece> getWhitePieces() {
-        return deepClonePieces.deepClone(whitePieces);
+        ArrayList <Piece> list = deepClonePieces(whitePieces);
+        return list;
     }
 
     public ArrayList<Piece> getBlackPieces() {
-        return deepClonePieces.deepClone(blackPieces);
+        ArrayList <Piece> list = deepClonePieces(blackPieces);
+        return list;
     }
     
-    
-    private class deepClone<Type>
+    private ArrayList<Piece> deepClonePieces(ArrayList<Piece> source)
     {
-        public ArrayList<Type> deepClone (ArrayList<Type> source)
+        ArrayList<Piece> dest = new ArrayList<Piece>();
+        for (Piece piece : source)
         {
-            ArrayList<Type> dest;
-            dest = new ArrayList<Type>();
-            for (Type t : source)
+            if (piece instanceof Bishop)
             {
-                dest.add(t);
+                try { 
+                    dest.add((Bishop)piece.clone());
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(snapshot.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            return dest;
+            if (piece instanceof King)
+            {
+                try { 
+                    dest.add((King)piece.clone());
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(snapshot.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (piece instanceof Knight)
+            {
+                try { 
+                    dest.add((Knight)piece.clone());
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(snapshot.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (piece instanceof Pawn)
+            {
+                try { 
+                    dest.add((Pawn)piece.clone());
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(snapshot.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (piece instanceof Queen)
+            {
+                try { 
+                    dest.add((Queen)piece.clone());
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(snapshot.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (piece instanceof Rook)
+            {
+                try { 
+                    dest.add((Rook)piece.clone());
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(snapshot.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
+        return dest;
     }
+    
+    private ArrayList<Pawn> deepClonePawns(ArrayList<Pawn> source)
+    {
+        ArrayList<Pawn> dest = new ArrayList<Pawn>();
+        for (Pawn pawn : source)
+        {
+            try {
+                dest.add((Pawn) pawn.clone());
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(snapshot.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return dest;
+    }
+    
+    
 }

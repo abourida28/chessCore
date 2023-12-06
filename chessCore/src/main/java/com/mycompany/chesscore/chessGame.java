@@ -26,12 +26,11 @@ public class chessGame {
     public constants.GAME_STATUS getGameStatus() {
         return status;
     }
-    
-    public Square getKingSquare()
-    {
+
+    public Square getKingSquare() {
         return board.findKing(hasTurn);
     }
-    
+
     public Color getHasTurn() {
         return hasTurn;
     }
@@ -43,19 +42,18 @@ public class chessGame {
         hasTurn = Color.WHITE;
         isEnded = false;
         status = constants.GAME_STATUS.GAME_IN_PROGRESS;
-        saveSnap();
+//        saveSnap();
     }
-    
-    public TimeLine getTimeLine(){
+
+    public TimeLine getTimeLine() {
         return board.getTimeLine();
     }
-    
-    public Square getSquare(int row, constants.Letter col)
-    {
-        return board.board[row-1][col.ordinal()];
+
+    public Square getSquare(int row, constants.Letter col) {
+        return board.board[row - 1][col.ordinal()];
     }
-    
-    public Piece getPiece(Square square){
+
+    public Piece getPiece(Square square) {
         return board.board[square.getRow()][square.getColumn().ordinal()].getPiece();
     }
 
@@ -104,9 +102,9 @@ public class chessGame {
     }
 
     public ArrayList<Square> getAllValid(Square start) throws ChessGameException {
-        
+
         ArrayList<Square> availableMoves = new ArrayList<Square>();
-        
+
         Square square;
         for (int number = 1; number <= 8; number++) {
             for (constants.Letter letter : constants.Letter.values()) {
@@ -153,10 +151,11 @@ public class chessGame {
             }
         }
         isEnded = true;
-        if (color == Color.WHITE)
+        if (color == Color.WHITE) {
             status = constants.GAME_STATUS.BLACK_WON;
-        else
+        } else {
             status = constants.GAME_STATUS.WHITE_WON;
+        }
         return true;
     }
 
@@ -223,8 +222,9 @@ public class chessGame {
     }
 
     private static void validatePromoteStr(String promoteStr) throws ChessGameException {
-        if (promoteStr.equals(""))
+        if (promoteStr.equals("")) {
             return;
+        }
         if (promoteStr.length() != 1) {
             throw new ChessGameException("Invalid promotion string: " + promoteStr);
         }
@@ -244,7 +244,6 @@ public class chessGame {
 
 //        Square start = Square.parseSquare(startStr);
 //        Square target = Square.parseSquare(targetStr);
-        
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
 
@@ -293,63 +292,48 @@ public class chessGame {
 
             // Move the piece on the board
             board.move(start, target);
-            
+
             if (!promoteStr.equals("") && target.getPiece() instanceof Pawn && ((Pawn) target.getPiece()).isPromotable()) {
                 Piece pawn = target.getPiece();
                 board.delete(pawn);
                 if ("K".equals(promoteStr)) {
                     Knight promotedPiece = new Knight(hasTurn, target.getRow(), target.getColumn(), board);
                     target.setPiece(promotedPiece);
-                    if (hasTurn == Color.WHITE)
+                    if (hasTurn == Color.WHITE) {
                         board.whitePieces.add(promotedPiece);
-                    else
+                    } else {
                         board.blackPieces.add(promotedPiece);
+                    }
                 } else if ("B".equals(promoteStr)) {
                     Bishop promotedPiece = new Bishop(hasTurn, target.getRow(), target.getColumn(), board);
                     target.setPiece(promotedPiece);
-                    if (hasTurn == Color.WHITE)
+                    if (hasTurn == Color.WHITE) {
                         board.whitePieces.add(promotedPiece);
-                    else
+                    } else {
                         board.blackPieces.add(promotedPiece);
+                    }
                 } else if ("Q".equals(promoteStr)) {
                     Queen promotedPiece = new Queen(hasTurn, target.getRow(), target.getColumn(), board);
                     target.setPiece(promotedPiece);
-                    if (hasTurn == Color.WHITE)
+                    if (hasTurn == Color.WHITE) {
                         board.whitePieces.add(promotedPiece);
-                    else
+                    } else {
                         board.blackPieces.add(promotedPiece);
+                    }
                 } else if ("R".equals(promoteStr)) {
                     Rook promotedPiece = new Rook(hasTurn, target.getRow(), target.getColumn(), board);
                     target.setPiece(promotedPiece);
-                    if (hasTurn == Color.WHITE)
+                    if (hasTurn == Color.WHITE) {
                         board.whitePieces.add(promotedPiece);
-                    else
+                    } else {
                         board.blackPieces.add(promotedPiece);
+                    }
                 }
-                
-            }
-            saveSnap();
-            // Check for checkmate or stalemate
-            if (isCheckMate(hasTurn.getOpponentColor())) {
-                System.out.println(hasTurn + " Won");
-            } else if (isStaleMate(hasTurn.getOpponentColor())) {
-                System.out.println("Stalemate");
-            }// Check if the move puts the opponent's king in check
-            else if (isCheck(hasTurn.getOpponentColor())) {
-                System.out.println(hasTurn.getOpponentColor() + " in check");
-                if (hasTurn == Color.WHITE)
-                    status = constants.GAME_STATUS.BLACK_IN_CHECK;
-                else
-                    status = constants.GAME_STATUS.WHITE_IN_CHECK;
-            }
 
-            // Check for insufficient material
-            else if (isInsufficientMaterial()) {
-                System.out.println("Insufficient Material");
             }
-            else 
-                status = constants.GAME_STATUS.GAME_IN_PROGRESS;
-            
+//            saveSnap();
+            setGameStatus();
+
             // Switch turn
             hasTurn = hasTurn.getOpponentColor();
             return true;
@@ -359,13 +343,36 @@ public class chessGame {
         }
 //        board.print();
     }
-    
-    public void unDo(){
-        //hasTurn = (hasTurn.equals(Color.WHITE) == true) ? Color.BLACK : Color.WHITE;
+
+    public void unDo() {
+        hasTurn = (hasTurn.equals(Color.WHITE) == true) ? Color.BLACK : Color.WHITE;
         board.restoreSnapshot();
+        setGameStatus();
+    }
+
+    private void setGameStatus()
+    {
+        if (isCheckMate(hasTurn.getOpponentColor())) {
+                System.out.println(hasTurn + " Won");
+            } else if (isStaleMate(hasTurn.getOpponentColor())) {
+                System.out.println("Stalemate");
+            }// Check if the move puts the opponent's king in check
+            else if (isCheck(hasTurn.getOpponentColor())) {
+                System.out.println(hasTurn.getOpponentColor() + " in check");
+                if (hasTurn == Color.WHITE) {
+                    status = constants.GAME_STATUS.BLACK_IN_CHECK;
+                } else {
+                    status = constants.GAME_STATUS.WHITE_IN_CHECK;
+                }
+            } // Check for insufficient material
+            else if (isInsufficientMaterial()) {
+                System.out.println("Insufficient Material");
+            } else {
+                status = constants.GAME_STATUS.GAME_IN_PROGRESS;
+            }
     }
     
-    public void saveSnap(){
+    public void saveSnap() {
         board.saveSnapshot();
     }
 
@@ -407,7 +414,7 @@ public class chessGame {
                 return false;
             }
         }
-        
+
         isEnded = true;
         status = constants.GAME_STATUS.INSUFFICIENT_MATERIAL;
         return true;

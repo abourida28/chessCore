@@ -12,9 +12,16 @@ import com.mycompany.chesscore.constants.Color;
  *
  * @author omara
  */
-public abstract class Piece {
+public abstract class Piece{
     protected int row;
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+    
+    
+    
     public void setRow(int row) {
         this.row = row;
     }

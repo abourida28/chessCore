@@ -6,7 +6,13 @@ import com.mycompany.chesscore.Square;
 import com.mycompany.chesscore.constants.Color;
 import com.mycompany.chesscore.constants.Letter;
 
-public class Bishop extends Piece {
+public class Bishop extends Piece{
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Bishop bishop = new  Bishop(this.getColor(), this.row, this.column, this.getBoard());
+        return bishop;
+    }
 
     public Bishop(Color color, int row, Letter column, ChessBoard board) {
         super(color, row, column, board);

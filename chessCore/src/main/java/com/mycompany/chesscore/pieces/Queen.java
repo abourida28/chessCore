@@ -13,6 +13,12 @@ public class Queen extends Piece {
     }
 
     @Override
+    public Object clone() throws CloneNotSupportedException {
+        Queen queen = new Queen(this.getColor(), this.row, this.column, this.getBoard());
+        return queen;
+    }
+    
+    @Override
     public boolean isValidMove(Square target)  throws ChessGameException{
         if (!super.isValidMove(target)) {
             return false;

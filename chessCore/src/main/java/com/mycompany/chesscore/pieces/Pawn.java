@@ -13,6 +13,25 @@ public class Pawn extends Piece {
     private boolean lastMoveDouble;
     private boolean enPassant = false;
 
+    
+    public Pawn(Color color, int row, Letter column, ChessBoard board) {
+        super(color, row, column, board);
+        this.moved = false;
+        this.lastMoveDouble = false;
+    }
+    
+    private Pawn(Color color, int row, Letter column, ChessBoard board, boolean moved, boolean lastMoveDouble) {
+        super(color, row, column, board);
+        this.moved = moved;
+        this.lastMoveDouble = lastMoveDouble;
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Pawn pawn = new Pawn(this.getColor(), this.row, this.column, this.getBoard(), this.moved, this.lastMoveDouble);
+        return pawn;
+    }
+    
     public void setLastDoubleMovedFalse() {
         this.lastMoveDouble = false;
     }
@@ -21,11 +40,6 @@ public class Pawn extends Piece {
         return enPassant;
     }
 
-    public Pawn(Color color, int row, Letter column, ChessBoard board) {
-        super(color, row, column, board);
-        this.moved = false;
-        this.lastMoveDouble = false;
-    }
 
     public boolean hasMovedFirstDoubleMove() {
         return lastMoveDouble;

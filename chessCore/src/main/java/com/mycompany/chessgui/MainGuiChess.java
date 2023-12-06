@@ -49,8 +49,8 @@ public class MainGuiChess extends JFrame {
         "resources/WhiteKing.png",
         "resources/BlackKing.png"
     };
-    
-    public static boolean getIsWhiteTurn(){
+
+    public static boolean getIsWhiteTurn() {
         return isWhiteTurn;
     }
 
@@ -67,7 +67,7 @@ public class MainGuiChess extends JFrame {
         ImageIcon icon = new ImageIcon("resources/BlackKing.png");
         setIconImage(icon.getImage());
     }
-    
+
     private void initializeMenu() {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -81,14 +81,15 @@ public class MainGuiChess extends JFrame {
         undoMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(game.getTimeLine().getTimelineSize() == 1){
+                if (game.getTimeLine().getTimelineSize() == 1) {
                     System.out.println("No undo moves available");
-                }else{
-                game.unDo();
-                isWhiteTurn = !isWhiteTurn;
-                updateBoard();
+                } else {
+                    game.unDo();
+                    isWhiteTurn = !isWhiteTurn;
+                    updateBoard();
+                    updateStatus();
                 }
-                
+
             }
         });
     }
@@ -105,7 +106,7 @@ public class MainGuiChess extends JFrame {
                 } else {
                     color = new Color(139, 69, 19);
                 }
-                SquareGUI square = new SquareGUI(game.getSquare(row+1, Letter.values()[col]), color);
+                SquareGUI square = new SquareGUI(game.getSquare(row + 1, Letter.values()[col]), color);
                 square.setPreferredSize(new Dimension(80, 80));
                 square.addMouseListener(new ChessButtonListener(row, col));
                 boardSquares[row][col] = square;
@@ -164,36 +165,28 @@ public class MainGuiChess extends JFrame {
         }
     }
 
-    private void updateStatus()
-    {
+    private void updateStatus() {
         GAME_STATUS status = game.getGameStatus();
-        if (status == GAME_STATUS.GAME_IN_PROGRESS)
+        if (status == GAME_STATUS.GAME_IN_PROGRESS) {
             return;
-        if (status == GAME_STATUS.BLACK_IN_CHECK || status == GAME_STATUS.WHITE_IN_CHECK)
-        {
-            highlightKingInCheck();
         }
-        else if (status == GAME_STATUS.BLACK_WON)
-        {
+        if (status == GAME_STATUS.BLACK_IN_CHECK || status == GAME_STATUS.WHITE_IN_CHECK) {
+            highlightKingInCheck();
+        } else if (status == GAME_STATUS.BLACK_WON) {
             highlightKingInCheck();
             JOptionPane.showMessageDialog(null, "Game ended, BLACK WON!");
-        }
-        else if (status == GAME_STATUS.WHITE_WON)
-        {
+        } else if (status == GAME_STATUS.WHITE_WON) {
             highlightKingInCheck();
             JOptionPane.showMessageDialog(null, "Game ended, WHITE WON!");
-        }
-        else if (status == GAME_STATUS.INSUFFICIENT_MATERIAL)
-        {
+        } else if (status == GAME_STATUS.INSUFFICIENT_MATERIAL) {
             JOptionPane.showMessageDialog(null, "Game ended as a draw due to insufficient material!");
-        }
-        else if (status == GAME_STATUS.STALEMATE)
-        {
+        } else if (status == GAME_STATUS.STALEMATE) {
             JOptionPane.showMessageDialog(null, "Game ended as a draw due STALEMATE!");
         }
     }
-    
+
     private class ChessButtonListener implements MouseListener {
+
         private final int row;
         private final int col;
         private static Square firstClick = null;
@@ -205,10 +198,10 @@ public class MainGuiChess extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent action) {
-             while (!highlited.isEmpty()) {
-                    highlited.get(0).removeHighlight();
-                    highlited.remove(0);
-                }
+            while (!highlited.isEmpty()) {
+                highlited.get(0).removeHighlight();
+                highlited.remove(0);
+            }
             SquareGUI clickedSquare = (SquareGUI) action.getSource();
             if (firstClick == null || (clickedSquare.getSquare().getPiece() != null && clickedSquare.getSquare().getPiece().getColor() == game.getHasTurn())) {
                 if (clickedSquare.getSquare().getPiece() != null) {
@@ -218,43 +211,44 @@ public class MainGuiChess extends JFrame {
                     }
                 }
             } else {
-                if(firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare())){
-                    
+                if (firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare())) {
+
                     System.out.println("promotion made");
-       try{     
-        String message = "Choose a chess piece to promote:";
-        String title = "Piece Selection";
-        Object[] options = {"Rook", "Bishop", "Queen", "Knight"};
-        Object defaultOption = options[0];
-        int result = JOptionPane.showOptionDialog(
-                null,
-                message,
-                title,
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                options,
-                defaultOption
-        );
-        switch (result) {
-            case 0:
-                promoteTo = "R";
-                break;
-            case 1:
-                promoteTo = "B";
-                break;
-            case 2:
-                promoteTo = "Q";
-                break;
-            case 3:
-                promoteTo = "K";
-                break;
-            default:
-                promoteTo = "Q";
-                break;
-            
-        }
-          }catch(Exception e){}
+                    try {
+                        String message = "Choose a chess piece to promote:";
+                        String title = "Piece Selection";
+                        Object[] options = {"Rook", "Bishop", "Queen", "Knight"};
+                        Object defaultOption = options[0];
+                        int result = JOptionPane.showOptionDialog(
+                                null,
+                                message,
+                                title,
+                                JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE,
+                                null,
+                                options,
+                                defaultOption
+                        );
+                        switch (result) {
+                            case 0:
+                                promoteTo = "R";
+                                break;
+                            case 1:
+                                promoteTo = "B";
+                                break;
+                            case 2:
+                                promoteTo = "Q";
+                                break;
+                            case 3:
+                                promoteTo = "K";
+                                break;
+                            default:
+                                promoteTo = "Q";
+                                break;
+
+                        }
+                    } catch (Exception e) {
+                    }
                 }
                 boolean moved = game.move(firstClick, clickedSquare.getSquare(), promoteTo);
                 promoteTo = "";
@@ -306,6 +300,11 @@ public class MainGuiChess extends JFrame {
     }
 
     private void updateBoard() {
+
+        while (!highlited.isEmpty()) {
+            highlited.get(0).removeHighlight();
+            highlited.remove(0);
+        }
         Component[] components = boardPanel.getComponents();
         for (Component component : components) {
             boardPanel.remove(component);

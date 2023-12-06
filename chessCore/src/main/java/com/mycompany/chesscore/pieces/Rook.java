@@ -21,7 +21,18 @@ public class Rook extends Piece {
         super(color, row, column, board);
         moved = false;
     }
+    
+    private Rook(constants.Color color, int row, constants.Letter column, ChessBoard board, boolean moved) {
+        super(color, row, column, board);
+        this.moved = moved;
+    }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Rook rook = new Rook(this.getColor(), this.row, this.column, this.getBoard(), this.moved);
+        return rook;
+    }
+    
     public boolean isMoved() {
         return moved;
     }

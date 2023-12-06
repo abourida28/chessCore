@@ -20,6 +20,12 @@ public class Knight extends Piece {
     }
 
     @Override
+    public Object clone() throws CloneNotSupportedException {
+        Knight knight = new Knight(this.getColor(), this.row, this.column, this.getBoard());
+        return knight;
+    }
+    
+    @Override
     public boolean isValidMove(Square target) throws ChessGameException {
         if (!super.isValidMove(target))
             return false;

@@ -19,13 +19,25 @@ public class King extends Piece {
 
     private boolean moved;
 
-    public boolean isMoved() {
-        return moved;
-    }
-
     public King(Color color, int row, Letter column, ChessBoard board) {
         super(color, row, column, board);
         moved = false;
+    }
+    
+    private King(Color color, int row, Letter column, ChessBoard board, boolean moved)
+    {
+        super(color, row, column, board);
+        this.moved = moved;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        King king = new King(this.getColor(), this.row, this.column, this.getBoard(), this.moved);
+        return king;
+    }
+
+    public boolean isMoved() {
+        return moved;
     }
 
     @Override
@@ -35,7 +47,7 @@ public class King extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Square target)  throws ChessGameException{
+    public boolean isValidMove(Square target) throws ChessGameException {
         if (!super.isValidMove(target)) {
             return false;
         }
@@ -44,8 +56,7 @@ public class King extends Piece {
         int distanceV = Math.abs(super.row - target.getRow());
         if (distanceH <= 1 && distanceV <= 1) {
             return true;
-        } 
-        //Check if castling
+        } //Check if castling
         else if (distanceH == 2 && distanceV == 0 && !moved) {
             Piece rook = null;
             boolean safe = true;
@@ -55,7 +66,7 @@ public class King extends Piece {
             if (target.getColumn() == Letter.G) {
                 rook = super.getBoard().board[super.row - 1][Letter.H.ordinal()].getPiece();
 //                Square square = new Square(super.row, Letter.F)
-                  Square square = super.getBoard().board[super.row - 1][Letter.F.ordinal()];
+                Square square = super.getBoard().board[super.row - 1][Letter.F.ordinal()];
 
                 if (super.getBoard().isDangerous(square, super.getColor())) {
                     safe = false;
@@ -68,14 +79,16 @@ public class King extends Piece {
                 if (super.getBoard().isDangerous(square, super.getColor())) {
                     safe = false;
                 }
-                if (super.getBoard().board[super.row - 1][Letter.B.ordinal()].getPiece() != null)
+                if (super.getBoard().board[super.row - 1][Letter.B.ordinal()].getPiece() != null) {
                     safe = false;
+                }
             }
-            if (rook == null)
+            if (rook == null) {
                 return false;
-            else if (!(rook instanceof Rook))
+            } else if (!(rook instanceof Rook)) {
                 return false;
-            if ((!((Rook)rook).isMoved()) && safe) {
+            }
+            if ((!((Rook) rook).isMoved()) && safe) {
                 return true;
             }
         }
