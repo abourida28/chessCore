@@ -72,7 +72,7 @@ public class King extends Piece {
                     safe = false;
             }
 
-            if ((!rook.isMoved()) && safe) {
+            if ((rook != null && !rook.isMoved()) && safe) {
                 return true;
             }
         }

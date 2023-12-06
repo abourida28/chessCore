@@ -6,22 +6,29 @@ package com.mycompany.chesscore;
 
 import com.mycompany.chesscore.constants.Color;
 import com.mycompany.chesscore.pieces.Bishop;
+import com.mycompany.chesscore.pieces.ChessObserver;
+import com.mycompany.chesscore.pieces.ChessSubject;
 import com.mycompany.chesscore.pieces.King;
 import com.mycompany.chesscore.pieces.Knight;
 import com.mycompany.chesscore.pieces.Pawn;
 import com.mycompany.chesscore.pieces.Piece;
+import com.mycompany.chesscore.pieces.PieceFactory;
 import com.mycompany.chesscore.pieces.Queen;
 import com.mycompany.chesscore.pieces.Rook;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author omara
  */
-public class chessGame {
+public class chessGame implements ChessSubject{
 
     private ChessBoard board;
     private constants.GAME_STATUS status;
+    private List<ChessObserver> observers = new ArrayList<>();
+    private Color hasTurn;
+    private boolean isEnded;
 
     public constants.GAME_STATUS getGameStatus() {
         return status;
@@ -35,8 +42,6 @@ public class chessGame {
     public Color getHasTurn() {
         return hasTurn;
     }
-    private Color hasTurn;
-    private boolean isEnded;
 
     public chessGame() {
         board = new ChessBoard();
@@ -62,7 +67,6 @@ public class chessGame {
         }
 
         if (!start.getPiece().isValidMove(target)) {
-//                                 System.out.println("Piece don't move like that");
             return false;
         }
 
@@ -94,7 +98,6 @@ public class chessGame {
             }
 
         }
-
         return !putsKingInCheck;
     }
 
@@ -105,7 +108,6 @@ public class chessGame {
         Square square;
         for (int number = 1; number <= 8; number++) {
             for (constants.Letter letter : constants.Letter.values()) {
-//                square = new Square(number, letter);
                 square = board.board[number - 1][letter.ordinal()];
                 if (isValid(start, square, start.getPiece().getColor())) {
                     availableMoves.add(square);
@@ -233,13 +235,6 @@ public class chessGame {
     }
 
     public boolean move(Square start, Square target, String promoteStr) throws ChessGameException {
-//        validateMoveCoordinates(startStr);
-//        validateMoveCoordinates(targetStr);
-        validatePromoteStr(promoteStr);
-
-//        Square start = Square.parseSquare(startStr);
-//        Square target = Square.parseSquare(targetStr);
-
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
 
@@ -289,39 +284,15 @@ public class chessGame {
             // Move the piece on the board
             board.move(start, target);
             
-            if (!promoteStr.equals("") && target.getPiece() instanceof Pawn && ((Pawn) target.getPiece()).isPromotable()) {
+            if (target.getPiece() instanceof Pawn && ((Pawn) target.getPiece()).isPromotable()) {
                 Piece pawn = target.getPiece();
                 board.delete(pawn);
-                if ("K".equals(promoteStr)) {
-                    Knight promotedPiece = new Knight(hasTurn, target.getRow(), target.getColumn(), board);
-                    target.setPiece(promotedPiece);
-                    if (hasTurn == Color.WHITE)
+                Piece promotedPiece = PieceFactory.createPiece(promoteStr, hasTurn, target.getRow(), target.getColumn(), board);
+                target.setPiece(promotedPiece);
+                if (hasTurn == Color.WHITE)
                         board.whitePieces.add(promotedPiece);
                     else
                         board.blackPieces.add(promotedPiece);
-                } else if ("B".equals(promoteStr)) {
-                    Bishop promotedPiece = new Bishop(hasTurn, target.getRow(), target.getColumn(), board);
-                    target.setPiece(promotedPiece);
-                    if (hasTurn == Color.WHITE)
-                        board.whitePieces.add(promotedPiece);
-                    else
-                        board.blackPieces.add(promotedPiece);
-                } else if ("Q".equals(promoteStr)) {
-                    Queen promotedPiece = new Queen(hasTurn, target.getRow(), target.getColumn(), board);
-                    target.setPiece(promotedPiece);
-                    if (hasTurn == Color.WHITE)
-                        board.whitePieces.add(promotedPiece);
-                    else
-                        board.blackPieces.add(promotedPiece);
-                } else if ("R".equals(promoteStr)) {
-                    Rook promotedPiece = new Rook(hasTurn, target.getRow(), target.getColumn(), board);
-                    target.setPiece(promotedPiece);
-                    if (hasTurn == Color.WHITE)
-                        board.whitePieces.add(promotedPiece);
-                    else
-                        board.blackPieces.add(promotedPiece);
-                }
-                
             }
 
             // Check for checkmate or stalemate
@@ -397,5 +368,22 @@ public class chessGame {
         isEnded = true;
         status = constants.GAME_STATUS.INSUFFICIENT_MATERIAL;
         return true;
+    }
+
+    @Override
+    public void addObserver(ChessObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(ChessObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (ChessObserver observer : observers) {
+            observer.update();
+        }
     }
 }
