@@ -43,6 +43,11 @@ public class chessGame {
         hasTurn = Color.WHITE;
         isEnded = false;
         status = constants.GAME_STATUS.GAME_IN_PROGRESS;
+        saveSnap();
+    }
+    
+    public TimeLine getTimeLine(){
+        return board.getTimeLine();
     }
     
     public Square getSquare(int row, constants.Letter col)
@@ -235,11 +240,11 @@ public class chessGame {
     public boolean move(Square start, Square target, String promoteStr) throws ChessGameException {
 //        validateMoveCoordinates(startStr);
 //        validateMoveCoordinates(targetStr);
-        validatePromoteStr(promoteStr);
+//        validatePromoteStr(promoteStr);
 
 //        Square start = Square.parseSquare(startStr);
 //        Square target = Square.parseSquare(targetStr);
-
+        
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
 
@@ -323,7 +328,7 @@ public class chessGame {
                 }
                 
             }
-
+            saveSnap();
             // Check for checkmate or stalemate
             if (isCheckMate(hasTurn.getOpponentColor())) {
                 System.out.println(hasTurn + " Won");
@@ -353,6 +358,15 @@ public class chessGame {
             return false;
         }
 //        board.print();
+    }
+    
+    public void unDo(){
+        //hasTurn = (hasTurn.equals(Color.WHITE) == true) ? Color.BLACK : Color.WHITE;
+        board.restoreSnapshot();
+    }
+    
+    public void saveSnap(){
+        board.saveSnapshot();
     }
 
     private boolean isInsufficientMaterial() throws ChessGameException {

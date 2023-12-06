@@ -27,6 +27,7 @@ public class ChessBoard {
     ArrayList<Pawn> blackPawns;
     ArrayList<Piece> whitePieces;
     ArrayList<Piece> blackPieces;
+    private TimeLine timeline;
 
     public ChessBoard() {
         Piece piece;
@@ -34,10 +35,10 @@ public class ChessBoard {
         blackPawns = new ArrayList<Pawn>();
         whitePieces = new ArrayList<Piece>();
         blackPieces = new ArrayList<Piece>();
+        timeline =  new TimeLine();
         for (int number = 1; number <= 8; number++) {
             for (Letter letter : Letter.values()) {
                 board[number - 1][letter.ordinal()] = new Square(number, letter);
-
                 if (number == 2) {
                     piece = new Pawn(constants.Color.WHITE, number, letter, this);
                     board[number - 1][letter.ordinal()].setPiece(piece);
@@ -108,7 +109,6 @@ public class ChessBoard {
         }
         Piece atFinish = finish.getPiece();
         delete(atFinish);
-        
         Piece piece = start.getPiece();
         finish.setPiece(piece);
         start.setPiece(null);
@@ -133,6 +133,39 @@ public class ChessBoard {
                 blackPawns.remove(piece);
             }
         }
+    }
+    
+    
+    public void saveSnapshot() {
+        snapshot snapshot = new snapshot(whitePawns, blackPawns, whitePieces, blackPieces);
+        timeline.pushSnapshot(snapshot);
+    }
+    
+    public TimeLine getTimeLine(){
+        return timeline;
+    }
+
+    public void restoreSnapshot() {
+            if (timeline.hasSnapshots()){
+                snapshot snapshot = timeline.popSnapshot();
+                this.whitePawns = snapshot.getWhitePawns();
+                this.blackPawns = snapshot.getBlackPawns();
+                this.whitePieces = snapshot.getWhitePieces();
+                this.blackPieces = snapshot.getBlackPieces();
+                reDrawBoard();
+            }
+//            else{
+//                System.out.println("No more moves to undo.");
+//            }
+    }
+    
+    public void reDrawBoard(){
+//        for(int i=0;i<8;i++){
+//            this.board[whitePieces.get(i).getSquare().getRow()][whitePieces.get(i).getSquare().getColumn().ordinal()].setPiece(null);
+//            this.board[whitePieces.get(i).getSquare().getRow()][whitePieces.get(i).getSquare().getColumn().ordinal()].setPiece(whitePieces.get(i)); 
+//            this.board[blackPieces.get(i).getSquare().getRow()][blackPieces.get(i).getSquare().getColumn().ordinal()].setPiece(null);
+//            this.board[blackPieces.get(i).getSquare().getRow()][blackPieces.get(i).getSquare().getColumn().ordinal()].setPiece(blackPieces.get(i)); 
+//        }
     }
     
     protected void testMove(Square start, Square finish) throws ChessGameException

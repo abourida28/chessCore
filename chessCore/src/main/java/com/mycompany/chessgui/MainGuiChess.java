@@ -55,6 +55,7 @@ public class MainGuiChess extends JFrame {
     }
 
     public MainGuiChess() {
+        initializeMenu();
         initializeBoard();
         updateIcons();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,6 +66,31 @@ public class MainGuiChess extends JFrame {
         setVisible(true);
         ImageIcon icon = new ImageIcon("resources/BlackKing.png");
         setIconImage(icon.getImage());
+    }
+    
+    private void initializeMenu() {
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        JMenu gameMenu = new JMenu("Game");
+        menuBar.add(gameMenu);
+
+        JMenuItem undoMenuItem = new JMenuItem("Undo");
+        gameMenu.add(undoMenuItem);
+
+        undoMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(game.getTimeLine().getTimelineSize() == 1){
+                    System.out.println("No undo moves available");
+                }else{
+                game.unDo();
+                isWhiteTurn = !isWhiteTurn;
+                updateBoard();
+                }
+                
+            }
+        });
     }
 
     private void initializeBoard() {
@@ -195,9 +221,7 @@ public class MainGuiChess extends JFrame {
                 if(firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare())){
                     
                     System.out.println("promotion made");
-                    try{
-
-                        
+       try{     
         String message = "Choose a chess piece to promote:";
         String title = "Piece Selection";
         Object[] options = {"Rook", "Bishop", "Queen", "Knight"};
