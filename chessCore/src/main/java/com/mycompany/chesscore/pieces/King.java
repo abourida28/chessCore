@@ -47,13 +47,13 @@ public class King extends Piece {
         } 
         //Check if castling
         else if (distanceH == 2 && distanceV == 0 && !moved) {
-            Rook rook = null;
+            Piece rook = null;
             boolean safe = true;
             if (super.getBoard().isDangerous(super.getSquare(), super.getColor())) {
                 safe = false;
             }
             if (target.getColumn() == Letter.G) {
-                rook = (Rook) super.getBoard().board[super.row - 1][Letter.H.ordinal()].getPiece();
+                rook = super.getBoard().board[super.row - 1][Letter.H.ordinal()].getPiece();
 //                Square square = new Square(super.row, Letter.F)
                   Square square = super.getBoard().board[super.row - 1][Letter.F.ordinal()];
 
@@ -62,7 +62,7 @@ public class King extends Piece {
                 }
 
             } else if (target.getColumn() == Letter.C) {
-                rook = (Rook) super.getBoard().board[super.row - 1][Letter.A.ordinal()].getPiece();
+                rook = super.getBoard().board[super.row - 1][Letter.A.ordinal()].getPiece();
 //                Square square = new Square(super.row, Letter.D);
                 Square square = super.getBoard().board[row - 1][Letter.D.ordinal()];
                 if (super.getBoard().isDangerous(square, super.getColor())) {
@@ -71,8 +71,11 @@ public class King extends Piece {
                 if (super.getBoard().board[super.row - 1][Letter.B.ordinal()].getPiece() != null)
                     safe = false;
             }
-
-            if ((!rook.isMoved()) && safe) {
+            if (rook == null)
+                return false;
+            else if (!(rook instanceof Rook))
+                return false;
+            if ((!((Rook)rook).isMoved()) && safe) {
                 return true;
             }
         }
