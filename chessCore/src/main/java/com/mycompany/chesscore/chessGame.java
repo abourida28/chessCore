@@ -22,11 +22,10 @@ import java.util.List;
  *
  * @author omara
  */
-public class chessGame implements ChessSubject{
+public class chessGame{
 
     private ChessBoard board;
     private constants.GAME_STATUS status;
-    private List<ChessObserver> observers = new ArrayList<>();
     private Color hasTurn;
     private boolean isEnded;
 
@@ -370,20 +369,4 @@ public class chessGame implements ChessSubject{
         return true;
     }
 
-    @Override
-    public void addObserver(ChessObserver observer) {
-        observers.add(observer);
-    }
-
-    @Override
-    public void removeObserver(ChessObserver observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (ChessObserver observer : observers) {
-            observer.update();
-        }
-    }
 }
