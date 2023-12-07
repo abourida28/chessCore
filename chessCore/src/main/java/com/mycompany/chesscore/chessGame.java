@@ -13,6 +13,7 @@ import com.mycompany.chesscore.pieces.Piece;
 import com.mycompany.chesscore.pieces.Queen;
 import com.mycompany.chesscore.pieces.Rook;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,6 +23,9 @@ public class chessGame {
 
     private ChessBoard board;
     private constants.GAME_STATUS status;
+    
+    private List<ChessObserver> observers = new ArrayList<>();
+
 
     public constants.GAME_STATUS getGameStatus() {
         return status;
@@ -42,6 +46,7 @@ public class chessGame {
         hasTurn = Color.WHITE;
         isEnded = false;
         status = constants.GAME_STATUS.GAME_IN_PROGRESS;
+        addObserver(board);
 //        saveSnap();
     }
 
@@ -55,6 +60,21 @@ public class chessGame {
 
     public Piece getPiece(Square square) {
         return board.board[square.getRow()][square.getColumn().ordinal()].getPiece();
+    }
+    
+    public void addObserver(ChessObserver observer) {
+        observers.add(observer);
+    }
+    
+
+    public void removeObserver(ChessObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for (ChessObserver observer : observers) {
+            observer.update();
+        }
     }
 
     public boolean isValid(Square start, Square target, Color color) throws ChessGameException {
@@ -221,29 +241,7 @@ public class chessGame {
         }
     }
 
-    private static void validatePromoteStr(String promoteStr) throws ChessGameException {
-        if (promoteStr.equals("")) {
-            return;
-        }
-        if (promoteStr.length() != 1) {
-            throw new ChessGameException("Invalid promotion string: " + promoteStr);
-        }
-        char[] availablePromotions = new char[]{'R', 'K', 'B', 'Q'};
-        for (char available : availablePromotions) {
-            if (promoteStr.charAt(0) == available) {
-                return;
-            }
-        }
-        throw new ChessGameException("Invalid promotion string: " + promoteStr);
-    }
-
     public boolean move(Square start, Square target, String promoteStr) throws ChessGameException {
-//        validateMoveCoordinates(startStr);
-//        validateMoveCoordinates(targetStr);
-//        validatePromoteStr(promoteStr);
-
-//        Square start = Square.parseSquare(startStr);
-//        Square target = Square.parseSquare(targetStr);
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
 
@@ -331,9 +329,7 @@ public class chessGame {
                 }
 
             }
-//            saveSnap();
-            setGameStatus();
-
+              setGameStatus();
             // Switch turn
             hasTurn = hasTurn.getOpponentColor();
             return true;
@@ -370,6 +366,7 @@ public class chessGame {
             } else {
                 status = constants.GAME_STATUS.GAME_IN_PROGRESS;
             }
+        notifyObservers();
     }
     
     public void saveSnap() {

@@ -20,7 +20,7 @@ import java.util.ArrayList;
  *
  * @author omara
  */
-public class ChessBoard {
+public class ChessBoard implements ChessObserver{
     
     public Square[][] board = new Square[8][8];
     ArrayList<Pawn> whitePawns;
@@ -94,6 +94,11 @@ public class ChessBoard {
         }
     }
     
+    @Override
+    public void update() {
+        reDrawBoard();
+    }
+    
     protected void move(Square start, Square finish) throws ChessGameException {
         saveSnapshot();
         start = board[start.getRow() - 1][start.getColumn().ordinal()];
@@ -150,14 +155,11 @@ public class ChessBoard {
             this.blackPawns = snapshot.getBlackPawns();
             this.whitePieces = snapshot.getWhitePieces();
             this.blackPieces = snapshot.getBlackPieces();
-            reDrawBoard();
+            update();
         }
-//            else{
-//                System.out.println("No more moves to undo.");
-//            }
     }
     
-    public void reDrawBoard() {//Not finished
+    public void reDrawBoard() {
         for (int number = 1; number <= 8; number++) {
             for (Letter letter : Letter.values()) {
                 board[number - 1][letter.ordinal()].setPiece(null);
