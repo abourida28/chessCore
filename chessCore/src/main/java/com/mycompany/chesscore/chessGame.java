@@ -42,7 +42,14 @@ public class chessGame {
     private boolean isEnded;
 
     public chessGame() {
-        board = new ChessBoard();
+        board = new ChessBoard()
+                .withPawns()
+                .withBishops()
+                .withKings()
+                .withKnights()
+                .withQueens()
+                .withRooks()
+                .build();
         hasTurn = Color.WHITE;
         isEnded = false;
         status = constants.GAME_STATUS.GAME_IN_PROGRESS;

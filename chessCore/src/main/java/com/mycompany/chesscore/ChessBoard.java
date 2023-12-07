@@ -15,6 +15,7 @@ import com.mycompany.chesscore.pieces.Queen;
 import com.mycompany.chesscore.pieces.Rook;
 import com.mycompany.chesscore.constants.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -22,7 +23,7 @@ import java.util.ArrayList;
  */
 public class ChessBoard implements ChessObserver{
     
-    public Square[][] board = new Square[8][8];
+    public Square[][] board =  new Square[8][8];;
     ArrayList<Pawn> whitePawns;
     ArrayList<Pawn> blackPawns;
     ArrayList<Piece> whitePieces;
@@ -30,7 +31,7 @@ public class ChessBoard implements ChessObserver{
     private TimeLine timeline;
     
     public ChessBoard() {
-        Piece piece;
+        //Piece piece;
         whitePawns = new ArrayList<Pawn>();
         blackPawns = new ArrayList<Pawn>();
         whitePieces = new ArrayList<Piece>();
@@ -38,59 +39,120 @@ public class ChessBoard implements ChessObserver{
         timeline = new TimeLine();
         for (int number = 1; number <= 8; number++) {
             for (Letter letter : Letter.values()) {
-                board[number - 1][letter.ordinal()] = new Square(number, letter);
-                if (number == 2) {
-                    piece = new Pawn(constants.Color.WHITE, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
+               board[number - 1][letter.ordinal()] = new Square(number, letter);
+            }
+        }
+    }
+    
+
+    
+    public ChessBoard withPawns() {
+        initializePawnsForColor(Color.WHITE, 2);
+        initializePawnsForColor(Color.BLACK, 7);
+        return this;
+    }
+
+    public ChessBoard withRooks() {
+        initializeRooksForColor(Color.WHITE, 1);
+        initializeRooksForColor(Color.BLACK, 8);
+        return this;
+    }
+
+    public ChessBoard withKnights() {
+        initializeKnightsForColor(Color.WHITE, 1);
+        initializeKnightsForColor(Color.BLACK, 8);
+        return this;
+    }
+
+    public ChessBoard withBishops() {
+        initializeBishopsForColor(Color.WHITE, 1);
+        initializeBishopsForColor(Color.BLACK, 8);
+        return this;
+    }
+
+    public ChessBoard withQueens() {
+        initializeQueensForColor(Color.WHITE, 1);
+        initializeQueensForColor(Color.BLACK, 8);
+        return this;
+    }
+
+    public ChessBoard withKings() {
+        initializeKingsForColor(Color.WHITE, 1);
+        initializeKingsForColor(Color.BLACK, 8);
+        return this;
+    }
+    
+    public ChessBoard build() {
+        return this;
+    }
+    
+    private void initializePawnsForColor(Color color, int row) {
+        for (Letter letter : Letter.values()) {
+            Pawn piece = new Pawn(color, row, letter, this);
+            board[row - 1][letter.ordinal()].setPiece(piece);
+            if (color == Color.WHITE) {
                     whitePawns.add((Pawn) piece);
                     whitePieces.add(piece);
-                } else if (number == 7) {
-                    piece = new Pawn(constants.Color.BLACK, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    blackPawns.add((Pawn) piece);
-                    blackPieces.add(piece);
-                } else if (number == 1 && (letter == Letter.A || letter == Letter.H)) {
-                    piece = new Rook(constants.Color.WHITE, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    whitePieces.add(piece);
-                } else if (number == 8 && (letter == Letter.A || letter == Letter.H)) {
-                    piece = new Rook(constants.Color.BLACK, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    blackPieces.add(piece);
-                } else if (number == 1 && (letter == Letter.B || letter == Letter.G)) {
-                    piece = new Knight(constants.Color.WHITE, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    whitePieces.add(piece);
-                } else if (number == 8 && (letter == Letter.B || letter == Letter.G)) {
-                    piece = new Knight(constants.Color.BLACK, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    blackPieces.add(piece);
-                } else if (number == 1 && (letter == Letter.C || letter == Letter.F)) {
-                    piece = new Bishop(constants.Color.WHITE, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    whitePieces.add(piece);
-                } else if (number == 8 && (letter == Letter.C || letter == Letter.F)) {
-                    piece = new Bishop(constants.Color.BLACK, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    blackPieces.add(piece);
-                } else if (number == 1 && letter == Letter.D) {
-                    piece = new Queen(constants.Color.WHITE, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    whitePieces.add(piece);
-                } else if (number == 8 && letter == Letter.D) {
-                    piece = new Queen(constants.Color.BLACK, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    blackPieces.add(piece);
-                } else if (number == 1 && letter == Letter.E) {
-                    piece = new King(constants.Color.WHITE, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    whitePieces.add(piece);
-                } else if (number == 8 && letter == Letter.E) {
-                    piece = new King(constants.Color.BLACK, number, letter, this);
-                    board[number - 1][letter.ordinal()].setPiece(piece);
-                    blackPieces.add(piece);
-                }
+            } else {
+                blackPawns.add((Pawn) piece);
+                blackPieces.add(piece);
             }
+        }
+    }
+
+    private void initializeRooksForColor(Color color, int row) {
+        for (Letter letter : Arrays.asList(Letter.A, Letter.H)) {
+            Rook rook = new Rook(color, row, letter, this);
+            board[row - 1][letter.ordinal()].setPiece(rook);
+            if (color == Color.WHITE) {
+                whitePieces.add(rook);
+            } else {
+                blackPieces.add(rook);
+            }
+        }
+    }
+    
+        private void initializeKnightsForColor(Color color, int row) {
+        for (Letter letter : Arrays.asList(Letter.B, Letter.G)) {
+            Knight knight = new Knight(color, row, letter, this);
+            board[row - 1][letter.ordinal()].setPiece(knight);
+            if (color == Color.WHITE) {
+                whitePieces.add(knight);
+            } else {
+                blackPieces.add(knight);
+            }
+        }
+    }
+
+    private void initializeBishopsForColor(Color color, int row) {
+        for (Letter letter : Arrays.asList(Letter.C, Letter.F)) {
+            Bishop bishop = new Bishop(color, row, letter, this);
+            board[row - 1][letter.ordinal()].setPiece(bishop);
+            if (color == Color.WHITE) {
+                whitePieces.add(bishop);
+            } else {
+                blackPieces.add(bishop);
+            }
+        }
+    }
+
+    private void initializeQueensForColor(Color color, int row) {
+        Queen queen = new Queen(color, row, Letter.D, this);
+        board[row - 1][3].setPiece(queen);
+        if (color == Color.WHITE) {
+            whitePieces.add(queen);
+        } else {
+            blackPieces.add(queen);
+        }
+    }
+
+    private void initializeKingsForColor(Color color, int row) {
+        King king = new King(color, row, Letter.E, this);
+        board[row - 1][4].setPiece(king);
+        if (color == Color.WHITE) {
+            whitePieces.add(king);
+        } else {
+            blackPieces.add(king);
         }
     }
     
@@ -166,10 +228,10 @@ public class ChessBoard implements ChessObserver{
             }            
         }
         for (Piece piece : whitePieces) {
-            board[piece.getSquare().getRow()  - 1][piece.getSquare().getColumn().ordinal()].setPiece(piece);
+            board[piece.getSquare().getRow() - 1][piece.getSquare().getColumn().ordinal()].setPiece(piece);
         }
         for (Piece piece : blackPieces) {
-            board[piece.getSquare().getRow()  - 1][piece.getSquare().getColumn().ordinal()].setPiece(piece);
+            board[piece.getSquare().getRow() - 1][piece.getSquare().getColumn().ordinal()].setPiece(piece);
         }
     }
     
