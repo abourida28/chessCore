@@ -81,15 +81,15 @@ public class MainGuiChess extends JFrame {
         undoMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (game.getTimeLine().getTimelineSize() == 1) {
+                if (game.getTimeLine().getTimelineSize() == 0) {
                     System.out.println("No undo moves available");
                 } else {
                     game.unDo();
                     isWhiteTurn = !isWhiteTurn;
                     updateBoard();
+                    highlightKingInCheck();
                     updateStatus();
                 }
-
             }
         });
     }
@@ -110,11 +110,9 @@ public class MainGuiChess extends JFrame {
                 square.setPreferredSize(new Dimension(80, 80));
                 square.addMouseListener(new ChessButtonListener(row, col));
                 boardSquares[row][col] = square;
-
                 boardPanel.add(square);
             }
         }
-
         add(boardPanel);
     }
 
@@ -211,7 +209,7 @@ public class MainGuiChess extends JFrame {
                     }
                 }
             } else {
-                if (firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare())) {
+                if (firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare()) && firstClick.getPiece().isValidMove(clickedSquare.getSquare())) {
 
                     System.out.println("promotion made");
                     try {
@@ -323,8 +321,17 @@ public class MainGuiChess extends JFrame {
             }
         }
         updateIcons();
+        reapplyHighlights();
         boardPanel.revalidate();
         boardPanel.repaint();
+    }
+    
+    private void reapplyHighlights() {
+    // Clear existing highlights
+    while (!highlited.isEmpty()) {
+        highlited.get(0).removeHighlight();
+        highlited.remove(0);
+    }
     }
 
     public static void main(String[] args) {
