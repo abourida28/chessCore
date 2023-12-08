@@ -39,7 +39,10 @@ public class Pawn extends Piece {
     public boolean isEnPassant() {
         return enPassant;
     }
-
+    
+    public void resetEnPassant() {
+        enPassant = false;
+    }
 
     public boolean hasMovedFirstDoubleMove() {
         return lastMoveDouble;

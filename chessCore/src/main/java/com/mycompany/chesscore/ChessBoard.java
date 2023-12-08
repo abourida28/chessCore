@@ -163,17 +163,19 @@ public class ChessBoard implements ChessObserver{
     }
     
     protected void move(Square start, Square finish) throws ChessGameException {
-        saveSnapshot();
+        
         start = board[start.getRow() - 1][start.getColumn().ordinal()];
         finish = board[finish.getRow() - 1][finish.getColumn().ordinal()];
         if (start.getPiece().getColor() == constants.Color.WHITE) {
             for (Pawn pawn : whitePawns) {
                 pawn.setLastDoubleMovedFalse();
+                pawn.resetEnPassant();
             }
         }
         if (start.getPiece().getColor() == constants.Color.BLACK) {
             for (Pawn pawn : blackPawns) {
                 pawn.setLastDoubleMovedFalse();
+                pawn.resetEnPassant();
             }
         }
         Piece atFinish = finish.getPiece();

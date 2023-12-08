@@ -248,6 +248,7 @@ public class chessGame{
 //    }
 
     public boolean move(Square start, Square target, String promoteStr) throws ChessGameException {
+        
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
 
@@ -262,7 +263,8 @@ public class chessGame{
                 System.out.println("Invalid move");
                 return false;
             }
-
+            
+            board.saveSnapshot();
             // Check for castling need to be implmented in king with all its conditons
             if (piece instanceof King && Math.abs(start.getColumn().ordinal() - target.getColumn().ordinal()) == 2) {
                 System.out.println("Castle");
@@ -277,16 +279,9 @@ public class chessGame{
                     newRookPlace = new Square(start.getRow(), constants.Letter.D);
                 }
                 board.move(rook.getSquare(), newRookPlace);
-            } // Check for capturing
-            else if (target.getPiece() != null) {
-                System.out.println("Captured " + target.getPiece().getClass().getSimpleName());
             }
-
-            // Move the piece on the board
-            board.move(start, target);
-            
-             // Check for en-passant
-            if (piece instanceof Pawn && piece.isValidMove(target) && ((Pawn) piece).isEnPassant()) {
+              // Check for en-passant
+            else if (piece instanceof Pawn && piece.isValidMove(target) && ((Pawn) piece).isEnPassant()) {
                 System.out.println("Enpassant");
                 Piece eaten = null;
                 if (hasTurn == Color.WHITE) {
@@ -297,6 +292,15 @@ public class chessGame{
                 }
                 board.delete(eaten);
             }
+            // Check for capturing
+            else if (target.getPiece() != null) {
+                System.out.println("Captured " + target.getPiece().getClass().getSimpleName());
+            }
+
+            // Move the piece on the board
+            board.move(start, target);
+            
+           
             
             
             //Check for promotion
