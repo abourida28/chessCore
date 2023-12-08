@@ -67,22 +67,24 @@ public class chessGame{
         return board.board[row - 1][col.ordinal()];
     }
     
-    public void addObserver(ChessObserver observer) {
+    private void addObserver(ChessObserver observer) {
         observers.add(observer);
     }
     
 
-    public void removeObserver(ChessObserver observer) {
+    private void removeObserver(ChessObserver observer) {
         observers.remove(observer);
     }
 
-    public void notifyObservers() {
+    private void notifyObservers() {
         for (ChessObserver observer : observers) {
             observer.update();
         }
     }
 
-    public boolean isValid(Square start, Square target, Color color) throws ChessGameException {
+    
+    
+    private boolean isValid(Square start, Square target, Color color) throws ChessGameException {
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
         target = board.board[target.getRow() - 1][target.getColumn().ordinal()];
         if (start.getPiece() == null) {
@@ -223,25 +225,6 @@ public class chessGame{
         status = constants.GAME_STATUS.STALEMATE;
         return true;
     }
-
-//    private static void validateMoveCoordinates(String square) throws ChessGameException {
-//        if (square.length() != 2) {
-//            throw new ChessGameException("Invalid move format: " + square);
-//        }
-//
-//        char letterChar = square.charAt(0);
-//        int numberInt;
-//
-//        try {
-//            numberInt = Character.getNumericValue(square.charAt(1));
-//        } catch (NumberFormatException e) {
-//            throw new ChessGameException("Invalid move format: " + square);
-//        }
-//
-//        if (!(letterChar >= 'a' && letterChar <= 'h' && numberInt >= 1 && numberInt <= 8)) {
-//            throw new ChessGameException("Invalid move coordinates: " + square);
-//        }
-//    }
 
     public boolean move(Square start, Square target, String promoteStr) throws ChessGameException {
         

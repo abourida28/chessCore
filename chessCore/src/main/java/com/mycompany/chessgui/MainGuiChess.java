@@ -30,9 +30,9 @@ public class MainGuiChess extends JFrame {
 
     private SquareGUI[][] boardSquares;
     private static boolean isWhiteTurn = true;
-    chessGame game;
-    JPanel boardPanel;
-    java.util.ArrayList<SquareGUI> highlited = new ArrayList<>();
+    private chessGame game;
+    private JPanel boardPanel;
+    private java.util.ArrayList<SquareGUI> highlited = new ArrayList<>();
 
     public static final String[] pieceImagePaths = {
         "resources/WhitePawn.png",
@@ -49,10 +49,6 @@ public class MainGuiChess extends JFrame {
         "resources/BlackKing.png"
     };
 
-    public static boolean getIsWhiteTurn() {
-        return isWhiteTurn;
-    }
-
     public MainGuiChess() {
         initializeMenu();
         initializeBoard();
@@ -65,6 +61,10 @@ public class MainGuiChess extends JFrame {
         setVisible(true);
         ImageIcon icon = new ImageIcon("resources/BlackKing.png");
         setIconImage(icon.getImage());
+    }
+    
+    public static boolean getIsWhiteTurn() {
+        return isWhiteTurn;
     }
 
     private void initializeMenu() {
@@ -106,7 +106,7 @@ public class MainGuiChess extends JFrame {
                 }
                 SquareGUI square = new SquareGUI(game.getSquare(row + 1, Letter.values()[col]), color);
                 square.setPreferredSize(new Dimension(80, 80));
-                square.addMouseListener(new ChessButtonListener(row, col));
+                square.addMouseListener(new ChessButtonListener());
                 boardSquares[row][col] = square;
                 boardPanel.add(square);
             }
@@ -182,15 +182,7 @@ public class MainGuiChess extends JFrame {
     }
 
     private class ChessButtonListener implements MouseListener {
-
-        private final int row;
-        private final int col;
         private static Square firstClick = null;
-
-        public ChessButtonListener(int row, int col) {
-            this.row = row;
-            this.col = col;
-        }
 
         @Override
         public void mouseClicked(MouseEvent action) {
@@ -258,22 +250,22 @@ public class MainGuiChess extends JFrame {
         }
 
         @Override
-        public void mousePressed(MouseEvent e) {
+        public void mousePressed(MouseEvent action) {
             //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
 
         @Override
-        public void mouseReleased(MouseEvent e) {
+        public void mouseReleased(MouseEvent action) {
             //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(MouseEvent action) {
             //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(MouseEvent action) {
             //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
     }
