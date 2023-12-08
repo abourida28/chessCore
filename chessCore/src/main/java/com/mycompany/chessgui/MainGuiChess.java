@@ -33,7 +33,7 @@ public class MainGuiChess extends JFrame {
     public static String promoteTo = "";
     chessGame game;
     JPanel boardPanel;
-    java.util.ArrayList<SquareGUI> highlited = new ArrayList<SquareGUI>();
+    java.util.ArrayList<SquareGUI> highlited = new ArrayList<>();
 
     public static final String[] pieceImagePaths = {
         "resources/WhitePawn.png",
@@ -212,41 +212,40 @@ public class MainGuiChess extends JFrame {
                 if (firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare()) && firstClick.getPiece().isValidMove(clickedSquare.getSquare())) {
 
                     System.out.println("promotion made");
-                    try {
-                        String message = "Choose a chess piece to promote:";
-                        String title = "Piece Selection";
-                        Object[] options = {"Rook", "Bishop", "Queen", "Knight"};
-                        Object defaultOption = options[0];
-                        int result = JOptionPane.showOptionDialog(
-                                null,
-                                message,
-                                title,
-                                JOptionPane.YES_NO_CANCEL_OPTION,
-                                JOptionPane.PLAIN_MESSAGE,
-                                null,
-                                options,
-                                defaultOption
+                try{     
+                  String message = "Choose a chess piece to promote:";
+                  String title = "Piece Selection";
+                  Object[] options = {"Rook", "Bishop", "Queen", "Knight"};
+                  Object defaultOption = options[0];
+                  int result = JOptionPane.showOptionDialog(
+                          null,
+                          message,
+                          title,
+                          JOptionPane.YES_NO_CANCEL_OPTION,
+                          JOptionPane.PLAIN_MESSAGE,
+                          null,
+                          options,
+                          defaultOption
                         );
-                        switch (result) {
-                            case 0:
-                                promoteTo = "R";
-                                break;
-                            case 1:
-                                promoteTo = "B";
-                                break;
-                            case 2:
-                                promoteTo = "Q";
-                                break;
-                            case 3:
-                                promoteTo = "K";
-                                break;
-                            default:
-                                promoteTo = "Q";
-                                break;
+                  switch (result) {
+                      case 0:
+                          promoteTo = "rook";
+                          break;
+                      case 1:
+                          promoteTo = "bishop";
+                          break;
+                      case 2:
+                          promoteTo = "queen";
+                          break;
+                      case 3:
+                          promoteTo = "king";
+                          break;
+                      default:
+                          promoteTo = "queen";
+                          break;
 
-                        }
-                    } catch (Exception e) {
-                    }
+                  }
+                    }catch(Exception e){}
                 }
                 boolean moved = game.move(firstClick, clickedSquare.getSquare(), promoteTo);
                 promoteTo = "";

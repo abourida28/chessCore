@@ -14,6 +14,7 @@ import com.mycompany.chesscore.pieces.Piece;
 import com.mycompany.chesscore.pieces.Queen;
 import com.mycompany.chesscore.pieces.Rook;
 import com.mycompany.chesscore.constants.Color;
+import com.mycompany.chesscore.pieces.PieceFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 
