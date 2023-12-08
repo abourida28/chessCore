@@ -7,7 +7,6 @@ package com.mycompany.chesscore;
 import com.mycompany.chesscore.constants.Color;
 import com.mycompany.chesscore.pieces.Bishop;
 import com.mycompany.chesscore.ChessObserver;
-//import com.mycompany.chesscore.pieces.ChessSubject;
 import com.mycompany.chesscore.pieces.King;
 import com.mycompany.chesscore.pieces.Knight;
 import com.mycompany.chesscore.pieces.Pawn;
@@ -229,24 +228,24 @@ public class chessGame{
         return true;
     }
 
-    private static void validateMoveCoordinates(String square) throws ChessGameException {
-        if (square.length() != 2) {
-            throw new ChessGameException("Invalid move format: " + square);
-        }
-
-        char letterChar = square.charAt(0);
-        int numberInt;
-
-        try {
-            numberInt = Character.getNumericValue(square.charAt(1));
-        } catch (NumberFormatException e) {
-            throw new ChessGameException("Invalid move format: " + square);
-        }
-
-        if (!(letterChar >= 'a' && letterChar <= 'h' && numberInt >= 1 && numberInt <= 8)) {
-            throw new ChessGameException("Invalid move coordinates: " + square);
-        }
-    }
+//    private static void validateMoveCoordinates(String square) throws ChessGameException {
+//        if (square.length() != 2) {
+//            throw new ChessGameException("Invalid move format: " + square);
+//        }
+//
+//        char letterChar = square.charAt(0);
+//        int numberInt;
+//
+//        try {
+//            numberInt = Character.getNumericValue(square.charAt(1));
+//        } catch (NumberFormatException e) {
+//            throw new ChessGameException("Invalid move format: " + square);
+//        }
+//
+//        if (!(letterChar >= 'a' && letterChar <= 'h' && numberInt >= 1 && numberInt <= 8)) {
+//            throw new ChessGameException("Invalid move coordinates: " + square);
+//        }
+//    }
 
     public boolean move(Square start, Square target, String promoteStr) throws ChessGameException {
         start = board.board[start.getRow() - 1][start.getColumn().ordinal()];
@@ -278,18 +277,6 @@ public class chessGame{
                     newRookPlace = new Square(start.getRow(), constants.Letter.D);
                 }
                 board.move(rook.getSquare(), newRookPlace);
-            } // Check for en-passant
-            else if (piece instanceof Pawn && piece.isValidMove(target) && ((Pawn) piece).isEnPassant()) {
-                System.out.println("Enpassant");
-                //TODO: remove eaten pawn
-                Piece eaten = null;
-                if (hasTurn == Color.WHITE) {
-                    eaten = board.board[target.getRow() - 2][target.getColumn().ordinal()].getPiece();
-                }
-                if (hasTurn == Color.BLACK) {
-                    eaten = board.board[target.getRow()][target.getColumn().ordinal()].getPiece();
-                }
-                board.delete(eaten);
             } // Check for capturing
             else if (target.getPiece() != null) {
                 System.out.println("Captured " + target.getPiece().getClass().getSimpleName());
@@ -298,6 +285,21 @@ public class chessGame{
             // Move the piece on the board
             board.move(start, target);
             
+             // Check for en-passant
+            if (piece instanceof Pawn && piece.isValidMove(target) && ((Pawn) piece).isEnPassant()) {
+                System.out.println("Enpassant");
+                Piece eaten = null;
+                if (hasTurn == Color.WHITE) {
+                    eaten = board.board[target.getRow() - 2][target.getColumn().ordinal()].getPiece();
+                }
+                if (hasTurn == Color.BLACK) {
+                    eaten = board.board[target.getRow()][target.getColumn().ordinal()].getPiece();
+                }
+                board.delete(eaten);
+            }
+            
+            
+            //Check for promotion
             if (target.getPiece() instanceof Pawn && ((Pawn) target.getPiece()).isPromotable()) {
                 Piece pawn = target.getPiece();
                 board.delete(pawn);
@@ -309,6 +311,7 @@ public class chessGame{
                         board.blackPieces.add(promotedPiece);
             }
               setGameStatus();
+              
             // Switch turn
             hasTurn = hasTurn.getOpponentColor();
             return true;
@@ -320,9 +323,9 @@ public class chessGame{
     }
 
     public void unDo() {
-        hasTurn = (hasTurn.equals(Color.WHITE) == true) ? Color.BLACK : Color.WHITE;
         board.restoreSnapshot();
         setGameStatus();
+        hasTurn = hasTurn.getOpponentColor();
     }
 
     private void setGameStatus()

@@ -87,7 +87,7 @@ public class MainGuiChess extends JFrame {
                     game.unDo();
                     isWhiteTurn = !isWhiteTurn;
                     updateBoard();
-                    highlightKingInCheck();
+//                    highlightKingInCheck();
                     updateStatus();
                 }
             }
