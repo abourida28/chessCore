@@ -237,7 +237,7 @@ public class MainGuiChess extends JFrame {
                           promoteTo = "queen";
                           break;
                       case 3:
-                          promoteTo = "king";
+                          promoteTo = "knight";
                           break;
                       default:
                           promoteTo = "queen";
