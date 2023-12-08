@@ -30,7 +30,6 @@ public class MainGuiChess extends JFrame {
 
     private SquareGUI[][] boardSquares;
     private static boolean isWhiteTurn = true;
-    public static String promoteTo = "";
     chessGame game;
     JPanel boardPanel;
     java.util.ArrayList<SquareGUI> highlited = new ArrayList<>();
@@ -87,7 +86,6 @@ public class MainGuiChess extends JFrame {
                     game.unDo();
                     isWhiteTurn = !isWhiteTurn;
                     updateBoard();
-//                    highlightKingInCheck();
                     updateStatus();
                 }
             }
@@ -209,8 +207,9 @@ public class MainGuiChess extends JFrame {
                     }
                 }
             } else {
+                String promoteTo = "";
                 if (firstClick.getPiece() instanceof Pawn && ((Pawn) firstClick.getPiece()).isPromotable(clickedSquare.getSquare()) && firstClick.getPiece().isValidMove(clickedSquare.getSquare())) {
-
+                    
                     System.out.println("promotion made");
                 try{     
                   String message = "Choose a chess piece to promote:";
