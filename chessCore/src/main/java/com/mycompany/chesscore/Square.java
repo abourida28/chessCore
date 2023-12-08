@@ -29,23 +29,6 @@ public class Square {
         this.piece = null;
     }
     
-        protected static Square parseSquare(String coordinate) {
-        if (coordinate.length() == 2) {
-            char fileChar = coordinate.charAt(0);
-            char rankChar = coordinate.charAt(1);
-
-            // Check if file and rank are valid letters and numbers
-            if (fileChar >= 'a' && fileChar <= 'h' && rankChar >= '1' && rankChar <= '8') {
-                constants.Letter file = constants.Letter.values()[fileChar - 'a'];
-                int rank = Character.getNumericValue(rankChar);
-
-                return new Square(rank, file);
-            }
-        }
-
-        System.out.println("Invalid square coordinate: " + coordinate);
-        return null;
-    }
         
     public Piece getPiece() {
         return piece;
@@ -61,19 +44,5 @@ public class Square {
 
     public Letter getColumn() {
         return column;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Square))
-            return false;
-        Square sq = (Square)obj;
-        if(sq.getRow() == this.row && sq.getColumn() == this.column)
-            return true;
-        return false;
-    }
-
-    
-    
-    
+    }   
 }

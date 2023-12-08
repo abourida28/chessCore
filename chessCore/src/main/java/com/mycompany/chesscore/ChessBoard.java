@@ -89,7 +89,7 @@ public class ChessBoard implements ChessObserver{
     
     private void initializePawnsForColor(Color color, int row) {
         for (Letter letter : Letter.values()) {
-            Pawn piece = new Pawn(color, row, letter, this);
+            Piece piece = PieceFactory.createPiece("pawn",color,row,letter,this);
             board[row - 1][letter.ordinal()].setPiece(piece);
             if (color == Color.WHITE) {
                     whitePawns.add((Pawn) piece);
@@ -103,57 +103,57 @@ public class ChessBoard implements ChessObserver{
 
     private void initializeRooksForColor(Color color, int row) {
         for (Letter letter : Arrays.asList(Letter.A, Letter.H)) {
-            Rook rook = new Rook(color, row, letter, this);
-            board[row - 1][letter.ordinal()].setPiece(rook);
+            Piece piece = PieceFactory.createPiece("rook",color,row,letter,this);
+            board[row - 1][letter.ordinal()].setPiece(piece);
             if (color == Color.WHITE) {
-                whitePieces.add(rook);
+                whitePieces.add(piece);
             } else {
-                blackPieces.add(rook);
+                blackPieces.add(piece);
             }
         }
     }
     
         private void initializeKnightsForColor(Color color, int row) {
         for (Letter letter : Arrays.asList(Letter.B, Letter.G)) {
-            Knight knight = new Knight(color, row, letter, this);
-            board[row - 1][letter.ordinal()].setPiece(knight);
+            Piece piece = PieceFactory.createPiece("knight",color,row,letter,this);
+            board[row - 1][letter.ordinal()].setPiece(piece);
             if (color == Color.WHITE) {
-                whitePieces.add(knight);
+                whitePieces.add(piece);
             } else {
-                blackPieces.add(knight);
+                blackPieces.add(piece);
             }
         }
     }
 
     private void initializeBishopsForColor(Color color, int row) {
         for (Letter letter : Arrays.asList(Letter.C, Letter.F)) {
-            Bishop bishop = new Bishop(color, row, letter, this);
-            board[row - 1][letter.ordinal()].setPiece(bishop);
+            Piece piece = PieceFactory.createPiece("bishop",color,row,letter,this);
+            board[row - 1][letter.ordinal()].setPiece(piece);
             if (color == Color.WHITE) {
-                whitePieces.add(bishop);
+                whitePieces.add(piece);
             } else {
-                blackPieces.add(bishop);
+                blackPieces.add(piece);
             }
         }
     }
 
     private void initializeQueensForColor(Color color, int row) {
-        Queen queen = new Queen(color, row, Letter.D, this);
-        board[row - 1][3].setPiece(queen);
+        Piece piece = PieceFactory.createPiece("queen",color,row,Letter.D,this);
+        board[row - 1][3].setPiece(piece);
         if (color == Color.WHITE) {
-            whitePieces.add(queen);
+            whitePieces.add(piece);
         } else {
-            blackPieces.add(queen);
+            blackPieces.add(piece);
         }
     }
 
     private void initializeKingsForColor(Color color, int row) {
-        King king = new King(color, row, Letter.E, this);
-        board[row - 1][4].setPiece(king);
+        Piece piece = PieceFactory.createPiece("king",color,row,Letter.E,this);
+        board[row - 1][4].setPiece(piece);
         if (color == Color.WHITE) {
-            whitePieces.add(king);
+            whitePieces.add(piece);
         } else {
-            blackPieces.add(king);
+            blackPieces.add(piece);
         }
     }
     
@@ -283,33 +283,33 @@ public class ChessBoard implements ChessObserver{
         return false;
     }
     
-    protected void print() {
-        System.out.println("");
-        System.out.println("");
-        for (int number = 8; number >= 1; number--) {
-            for (Letter letter : Letter.values()) {
-                if (board[number - 1][letter.ordinal()].getPiece() == null) {
-                    if ((number + letter.ordinal()) % 2 == 1) {
-                        System.out.print("_");
-                    } else {
-                        System.out.print("_");
-                    }
-                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Pawn) {
-                    System.out.print("P");
-                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Rook) {
-                    System.out.print("R");
-                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Knight) {
-                    System.out.print("N");
-                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Bishop) {
-                    System.out.print("B");
-                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof King) {
-                    System.out.print("K");
-                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Queen) {
-                    System.out.print("Q");
-                }
-            }
-            System.out.println("");
-        }
-        System.out.println("*********************************");
-    }
+//    protected void print() {
+//        System.out.println("");
+//        System.out.println("");
+//        for (int number = 8; number >= 1; number--) {
+//            for (Letter letter : Letter.values()) {
+//                if (board[number - 1][letter.ordinal()].getPiece() == null) {
+//                    if ((number + letter.ordinal()) % 2 == 1) {
+//                        System.out.print("_");
+//                    } else {
+//                        System.out.print("_");
+//                    }
+//                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Pawn) {
+//                    System.out.print("P");
+//                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Rook) {
+//                    System.out.print("R");
+//                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Knight) {
+//                    System.out.print("N");
+//                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Bishop) {
+//                    System.out.print("B");
+//                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof King) {
+//                    System.out.print("K");
+//                } else if (board[number - 1][letter.ordinal()].getPiece() instanceof Queen) {
+//                    System.out.print("Q");
+//                }
+//            }
+//            System.out.println("");
+//        }
+//        System.out.println("*********************************");
+//    }
 }
