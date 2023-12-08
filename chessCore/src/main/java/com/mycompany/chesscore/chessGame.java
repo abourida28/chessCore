@@ -6,8 +6,8 @@ package com.mycompany.chesscore;
 
 import com.mycompany.chesscore.constants.Color;
 import com.mycompany.chesscore.pieces.Bishop;
-import com.mycompany.chesscore.pieces.ChessObserver;
-import com.mycompany.chesscore.pieces.ChessSubject;
+import com.mycompany.chesscore.ChessObserver;
+//import com.mycompany.chesscore.pieces.ChessSubject;
 import com.mycompany.chesscore.pieces.King;
 import com.mycompany.chesscore.pieces.Knight;
 import com.mycompany.chesscore.pieces.Pawn;
@@ -305,7 +305,7 @@ public class chessGame{
                 target.setPiece(promotedPiece);
                 if (hasTurn == Color.WHITE)
                         board.whitePieces.add(promotedPiece);
-                    } else {
+                     else 
                         board.blackPieces.add(promotedPiece);
             }
               setGameStatus();
