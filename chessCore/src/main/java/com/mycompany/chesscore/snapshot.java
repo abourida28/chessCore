@@ -34,12 +34,6 @@ public class snapshot {
         this.blackPieces = deepClonePieces(blackPieces);
     }
     
-    public void printState() {
-        System.out.println("White Pawns: " + whitePawns);
-        System.out.println("Black Pawns: " + blackPawns);
-        System.out.println("White Pieces: " + whitePieces);
-        System.out.println("Black Pieces: " + blackPieces);
-    }
 
     public ArrayList<Pawn> getWhitePawns() {
         ArrayList<Pawn> list = deepClonePawns(whitePawns);

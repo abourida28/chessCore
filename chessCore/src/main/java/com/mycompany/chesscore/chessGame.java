@@ -66,10 +66,6 @@ public class chessGame{
     public Square getSquare(int row, constants.Letter col) {
         return board.board[row - 1][col.ordinal()];
     }
-
-    public Piece getPiece(Square square) {
-        return board.board[square.getRow()][square.getColumn().ordinal()].getPiece();
-    }
     
     public void addObserver(ChessObserver observer) {
         observers.add(observer);
