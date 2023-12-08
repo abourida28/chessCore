@@ -14,6 +14,9 @@ import com.mycompany.chesscore.constants.Color;
  */
 public abstract class Piece{
     protected int row;
+    protected Letter column;
+    private Color color;
+    private ChessBoard board;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -29,7 +32,6 @@ public abstract class Piece{
     public void setColumn(Letter column) {
         this.column = column;
     }
-    protected Letter column;
 
     public Color getColor() {
         return color;
@@ -38,10 +40,7 @@ public abstract class Piece{
     public ChessBoard getBoard() {
         return board;
     }
-    
-    private Color color;
-    
-    private ChessBoard board;
+   
     public Piece(Color color, int row, Letter column, ChessBoard board)
     {
         this.color = color;
